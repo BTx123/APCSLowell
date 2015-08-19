@@ -8,7 +8,7 @@ background(100, 100, 100);
 // Face
 fill(255, 255, 0);
 //ellipse(100, 50, 80, 80);
-int d = 100;
+int d = 200;
 ellipse(width/2, height/2, d, d);
 // Mouth
 arc(width/2, height/2, 60, 60, PI/8, 7*PI/8);
