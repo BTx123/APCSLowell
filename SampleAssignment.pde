@@ -1,4 +1,7 @@
-size(200,100);
+int width = 640;
+int height = 480;
+
+size(width, height);
 fill(255,255,0);
 ellipse(100,50,80,80);
 arc(100,50,60,60,PI/8,7*PI/8);
