@@ -1,7 +1,12 @@
+/* Resizable Smiley Face
+ * Resize face by changing d (width and height)
+ */
+
+// Canvas size
+size(640, 480);
+
 int width = 640;
 int height = 480;
-
-size(640, 480);
 
 background(100, 100, 100);
 
