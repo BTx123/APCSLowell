@@ -1,22 +1,35 @@
 /* Resizable Smiley Face
- * Resize face by changing d (width and height)
+ * Author: Brian Tom
+ * Date: 8/20/2015
+ * Description: Resize face by changing d (width and height)
  */
 
-// Canvas size
-size(640, 480);
+void setup() {
+  size(640, 480);
+}
 
-int width = 640;
-int height = 480;
+// Smiley face function
+void smileyFace(int x, int y, int d) {
+  // Face
+  fill(255, 255, 0);
+  ellipse(x, y, d, d);
+  // Mouth
+  arc(x, y, 0.75*d, 0.75*d, PI/8, 7*PI/8);
+  // Eyes
+  fill(0, 0, 0);
+  ellipse(x - 0.15*d, y - 0.2*d, 0.125*d, 0.1875*d);
+  ellipse(x + 0.15*d, y - 0.2*d, 0.125*d, 0.1875*d);
+}
 
-background(100, 100, 100);
-
-// Face
-fill(255, 255, 0);
+int x = 320;
 int d = 400;
-ellipse(width/2, height/2, d, d);
-// Mouth
-arc(width/2, height/2, 0.75*d, 0.75*d, PI/8, 7*PI/8);
-// Eyes
-fill(0, 0, 0);
-ellipse(width/2 - 0.15*d, height/2 - 0.2*d, 0.125*d, 0.1875*d);
-ellipse(width/2 + 0.15*d, height/2 - 0.2*d, 0.125*d, 0.1875*d);
+int dir = 3; //<>//
+
+void draw() {
+  background(100, 100, 100);  
+  smileyFace(x, height/2, d);
+  x += dir;
+  if (x < d/2 || x > width - d/2) {
+    dir *= -1;
+  }
+}
