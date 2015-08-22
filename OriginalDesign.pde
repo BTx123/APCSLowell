@@ -14,7 +14,6 @@ void draw() {
   background(0);
   noStroke();
   int bounds = minBounds();
-  println(-(255.0/bounds)*d + 255);
   fill(255, 255, 255, -0.0005*d*d - 0.0009*d + 255);
   ellipse(width/2, height/2, d, d);
   d += velocity;
