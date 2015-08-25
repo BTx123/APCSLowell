@@ -11,15 +11,14 @@ void setup() {
 
 void draw() {
   background(127);
-  ball();
+
 }
 
-float x = (float) (Math.random()*width);
 float y = -10;
 
-void ball(x, y) {
+void ball() {
+  float x = (float) (Math.random()*width);
   noStroke();
   fill(0);
   ellipse(x, y, 20, 20);
-  y++;
 }

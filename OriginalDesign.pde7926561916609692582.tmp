@@ -1,0 +1,13 @@
+/* Normal Original Design
+ * Author: Brian Tom
+ * Date: 8/21/2015
+ * Description: 
+ */
+
+void setup() {
+  size(640, 480);
+}
+
+void draw() {
+  background(127);
+}
