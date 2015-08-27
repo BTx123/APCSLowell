@@ -4,7 +4,7 @@
  * Description: https://processing.org/examples/bouncybubbles.html
  */
 
-int maxBalls = 10;  // max number of balls on screen
+int maxBalls = 30;  // max number of balls on screen
 int numBalls = 0;   // number of balls currently on screen
 
 Ball[] ballArray;   // array of Balls
@@ -34,29 +34,34 @@ void dots(int pointSize, int grayScale, int interval) {
     }
 }
 
+// Ball class
 class Ball {
     float ballX;
     float ballY;
     float ballDiameter;
     float ballSpeed;
-    
+
     // Takes initializing variables for diameter and speed
     Ball(float tempDiameter, float tempSpeed) {
         ballDiameter = tempDiameter;
         ballSpeed = tempSpeed;
-        //ballX = (float) (Math.random() * (0.9*width) + 10);
-        //ballY = (float) (Math.random() * (0.9*height) + 10);
+        // ballX = (float) (Math.random() * (0.9*width) + 10);
+        // ballY = (float) (Math.random() * (0.9*height) + 10);
+
+        // ball spawns at mouse position
         ballX = mouseX;
         ballY = mouseY;
     }
     
+    color ballColor = color((int) (Math.random()*255), (int) (Math.random()*255), (int) (Math.random()*255));
+    
     // Draw ellipse
     void display() {
         noStroke();
-        fill(0);
+        fill(ballColor);
         ellipse(ballX, ballY, ballDiameter, ballDiameter);
     }
-    
+
     // Update position and direction
     void update() {
         // change balls y pos

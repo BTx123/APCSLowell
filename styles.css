@@ -1,23 +1,26 @@
-
 body {
-    background-color: rgb(200,200,200);
-    color: rgb(0,0,0);
-    font-family: "Open Sans", sans-serif;
+    /*background-color: rgb(200,200,200);*/
+	background-image: url(balls.jpg);
+	background-position: center center;
+	background-size: 125%;
+    color: rgb(255, 255, 255);
+	font-size: 100%;
+    font-family: "Impact", sans-serif;
     text-align: center;
 }
 
 #content {
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 header {
-	
+	font-size: 2.0em;
 }
 
 footer {
 	font-style: italic;
-	font-size: 90%;
+	font-size: 1.5em;
 }
 
