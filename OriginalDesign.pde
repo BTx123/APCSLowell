@@ -4,6 +4,8 @@
  * Description: https://processing.org/examples/bouncybubbles.html
  */
 
+// TODO: Fix bug - ball stuck on edge of screen when spawning too close to edge
+
 int maxBalls = 30;  // max number of balls on screen
 int numBalls = 0;   // number of balls currently on screen
 
