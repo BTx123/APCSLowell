@@ -63,16 +63,16 @@ class Ball {
         fill(ballColor);
         ellipse(ballX, ballY, ballDiameter, ballDiameter);
     }
-    
+
     // Update position and direction
     void update() {
         // change balls y pos
         ballY += ballSpeed;
         // bounce off bottom of screen
-        if (ballY > height - ballDiameter/2)
+        if (ballY >= height - ballDiameter/2)
             ballSpeed *= -1;
         // bounce off top of screen
-        else if (ballY < ballDiameter/2)
+        else if (ballY <= ballDiameter/2)
             ballSpeed *= -1;
     }
 }
@@ -80,22 +80,12 @@ class Ball {
 // Increase number of balls on click
 void mouseClicked() {
     int randomDiameter = (int) (Math.random()*41) + 10;
-    if (numBalls < maxBalls && mouseY > randomDiameter/2.0 && mouseY < height - randomDiameter/2.0) {
+    if (numBalls < maxBalls && mouseY < 0.99*height) {
         ballArray[numBalls] = new Ball(randomDiameter, 10);
         numBalls++;
     }
 }
 
-int value = 1;
-
-// Play animation when SPACE key is not pressed
-void keyTyped() {
-  println(value);
-    if (key == ' ' && value == 1) {
-        noLoop();
-        value = -1;
-    } else if (key == ' ' && value == -1) {
-        loop();
-        value = 1;
-    }
+void play() {
+    
 }
