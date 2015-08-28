@@ -6,10 +6,10 @@
 
 // TODO: Fix bug - ball stuck on edge of screen when spawning too close to edge
 
-int maxBalls = 50;  // max number of balls on screen
-int numBalls = 0;   // number of balls currently on screen
+int maxBalls = 100;  // max number of balls on screen
+int numBalls = 0;    // number of balls currently on screen
 
-Ball[] ballArray;   // array of Balls
+Ball[] ballArray;    // array of Balls
 
 void setup() {
     size(640, 480);
@@ -54,9 +54,9 @@ class Ball {
         ballX = mouseX;
         ballY = mouseY;
     }
-    
+
     color ballColor = color((int) (Math.random()*255), (int) (Math.random()*255), (int) (Math.random()*255));
-    
+
     // Draw ellipse
     void display() {
         noStroke();
@@ -64,10 +64,16 @@ class Ball {
         ellipse(ballX, ballY, ballDiameter, ballDiameter);
     }
     
+    // Determines spawn direction (up or down)
+    double randDir = Math.random();
+    
     // Update position and direction
     void update() {
-        // change balls y pos
-        ballY += ballSpeed;
+        // change balls' y pos
+        if (randDir < 0.5)     // 50% to spawn down
+            ballY += ballSpeed;
+        else                     // 50% to spawn down
+            ballY -= ballSpeed;
         // bounce off bottom of screen
         if (ballY > height - ballDiameter/2)
             ballSpeed *= -1;
@@ -79,18 +85,19 @@ class Ball {
 
 // Increase number of balls on click
 void mouseClicked() {
-    int randomDiameter = (int) (Math.random()*41) + 10;
-    if (numBalls < maxBalls && mouseY > randomDiameter/2.0 && mouseY < height - randomDiameter/2.0) {
-        ballArray[numBalls] = new Ball(randomDiameter, 10);
+    int randDiameter = (int) (Math.random()*41) + 10;
+    int randSpeed = (int) (Math.random()*11) + 5;
+    // prevent balls from spawning too close to edge and getting stuck
+    if (numBalls < maxBalls && mouseY > randDiameter/2.0 && mouseY < height - randDiameter/2.0) {
+        ballArray[numBalls] = new Ball(randDiameter, randSpeed);
         numBalls++;
     }
 }
 
 int value = 1;
 
-// Play animation when SPACE key is not pressed
+// Toggle animation with SPACEBAR key
 void keyTyped() {
-  println(value);
     if (key == ' ' && value == 1) {
         noLoop();
         value = -1;
