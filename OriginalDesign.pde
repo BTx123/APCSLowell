@@ -38,6 +38,7 @@ void dots(int pointSize, int grayScale, int interval) {
 
 // Ball class
 class Ball {
+  // Ball position, size, speed
     float ballX;
     float ballY;
     float ballDiameter;
