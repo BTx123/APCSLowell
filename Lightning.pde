@@ -7,52 +7,67 @@
 // Background color
 color bgColor = color(30, 60, 127);
 
-Lightning l = new Lightning();
+LightningBolt l = new LightningBolt();
 
 void setup() {
-  size(300, 300);
-  strokeWeight(3);
+  size(1280, 720);
   background(bgColor);
+  frameRate(150);
 }
 
 void draw() {
   l.display();
+  l.reset();
 }
 
-void mousePressed() {
-  // reset background, deleting previous lightning bolt
-  background(bgColor);
-  // reset starting and endpoint
-  startX = 0;
-  startY = 150;
-  endX = 0;
-  endY = 150;
-}
 
-class Lightning {
+
+class LightningBolt {
   // starting point for lightning bolt
-  int startX = 0;
-  int startY = 150;
-  int endX = 0;
-  int endY = 150;
-  
-  Lightning() {
+  int startX, startY, endX, endY;
+
+  LightningBolt() {  // initialize variables
+    startX = width/2;
+    startY = 0;
+    endX = width/2;
+    endY = 0;
   }
-  
+
   // Draw lightning bolts
   void display() {
-    // set random color of lightning
-    color randColor = color((int) (Math.random()*10) + 246, 255, (int) (Math.random()*256));
+    endX += (int) (Math.random()*49) - 24;  // change endX by random horizontal distance
+    endY += (int) (Math.random()*30);  // change endy by random vertical distance
+    // TODO: lightning flash
+    strokeWeight(7);
+    stroke(255, 255, 255, 75);
+    line(startX, startY, endX, endY);
+    // draw lightning line
+    strokeWeight(3);
+    color randColor = color((int) (Math.random()*10) + 246, 255, (int) (Math.random()*256));  // set random color of lightning
     stroke(randColor);
-    // change endX by random distance to the right
-    endX += (int) (Math.random()*10);
-    // change endy by random vertical distance
-    endY += (int) (Math.random()*19) - 9;
-    // draw line
     line(startX, startY, endX, endY);
     // set startX & startY to end of previous line
     startX = endX;
     startY = endY;
+    // reset start and endpoint when lightning reaches bottom of screen, leaving previous bolt
+    if (endY >= height) {
+      startX = width/2;
+      startY = 0;
+      endX = width/2;
+      endY = 0;
+    }
+  }
+
+  void reset() {
+    if (mousePressed && mouseButton == LEFT) {
+      // reset background, deleting previous lightning bolt(s)
+      background(bgColor);
+      // reset start and endpoint
+      startX = width/2;
+      startY = 0;
+      endX = width/2;
+      endY = 0;
+    }
   }
 }
 
