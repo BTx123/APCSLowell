@@ -38,8 +38,8 @@ class LightningBolt {
 
   // Draw lightning bolts
   void display() {
-    endX += randNum(79, -39);  // change endX by random horizontal distance
-    endY += randNum(30, -5);  // change endy by random vertical distance
+    endX += randNum(151, -75);  // change endX by random horizontal distance
+    endY += randNum(61, -10);  // change endy by random vertical distance
     // TODO: lightning flash
     strokeWeight(7);
     stroke(255, 255, 255, 75);
