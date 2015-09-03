@@ -5,7 +5,7 @@
  */
 
 // Background color
-color bgColor = color(30, 60, 127);
+color bgColor = color(0, 0, 50);
 
 LightningBolt l = new LightningBolt();
 
@@ -39,7 +39,7 @@ class LightningBolt {
   // Draw lightning bolts
   void display() {
     endX += randNum(151, -75);  // change endX by random horizontal distance
-    endY += randNum(61, -10);  // change endy by random vertical distance
+    endY += randNum(61, -10);   // change endy by random vertical distance
     // TODO: lightning flash
     strokeWeight(7);
     stroke(255, 255, 255, 75);
