@@ -13,6 +13,7 @@ void setup() {
   size(1280, 720);
   background(bgColor);
   frameRate(200);
+  clouds();
 }
 
 void draw() {
@@ -20,36 +21,25 @@ void draw() {
   l.reset();
 }
 
+int randNum(int range, int offset) {
+  return (int) (Math.random()*range) + offset;
+}
+
 class LightningBolt {
   // starting point for lightning bolt
   int startX, startY, endX, endY;
 
-  LightningBolt() {  // initialize variables
+  LightningBolt() {  // constructor initializes variables
     startX = mouseX;
     startY = 0;
     endX = mouseX;
     endY = 0;
   }
-  
-  int randNum(int range, int offset) {
-    return (int) (Math.random()*range) + offset;
-  }
-  
-  // Draw clouds
-  void cloud() {
-    noStroke();
-    fill(212, 212, 210);
-    int randX = (int) (Math.random()*width);
-    int randY = (int) (Math.random()*50);
-    int randWidth = (int) (Math.random()*100) + 50;
-    int randHeight = (int) (Math.random()*50) + 25;
-    ellipse(randX, randY, 100, 100);
-  }
-  
+
   // Draw lightning bolts
   void display() {
-    endX += (int) (Math.random()*79) - 39;  // change endX by random horizontal distance
-    endY += (int) (Math.random()*30) - 5;  // change endy by random vertical distance
+    endX += randNum(79, -39);  // change endX by random horizontal distance
+    endY += randNum(30, -5);  // change endy by random vertical distance
     // TODO: lightning flash
     strokeWeight(7);
     stroke(255, 255, 255, 75);
@@ -63,26 +53,40 @@ class LightningBolt {
     startX = endX;
     startY = endY;
     // reset start and endpoint when lightning reaches bottom of screen, leaving previous bolt
-    //    if (endY >= height) {
-    //      startX = mouseX;
-    //      startY = 0;
-    //      endX = mouseX;
-    //      endY = 0;
-    //    }
+    if (endY >= height) {
+      startX = mouseX;
+      startY = 0;
+      endX = mouseX;
+      endY = 0;
+    }
   }
 
   void reset() {
     if (mousePressed && mouseButton == LEFT) {
       // reset background, deleting previous lightning bolt(s)
       background(bgColor);
-      // TODO: stop clouds from contimuously spawning while mouse is pressed
-      cloud();
+      clouds();
       // reset start and endpoint
       startX = mouseX;
       startY = 0;
       endX = mouseX;
       endY = 0;
     }
+  }
+}
+
+// Draw clouds
+void clouds() {
+  noStroke();
+  fill(212, 212, 210);
+  int randX, randY, randWidth, randHeight;
+  randWidth = 0;
+  for (int i = 0; i < width; i += randWidth/3) {
+    randX = randNum(width, 0);
+    randY = randNum(50, 0);
+    randWidth = randNum(100, 50);
+    randHeight = randNum(50, 25);
+    ellipse(randX, randY, randWidth, randHeight);
   }
 }
 
