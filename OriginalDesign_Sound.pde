@@ -4,14 +4,19 @@
  * Description: https://processing.org/examples/bouncybubbles.html
  */
 
+import processing.sound.SoundFile;
+
 int maxBalls = 100;  // max number of balls on screen
 int numBalls = 0;    // number of balls currently on screen
 
 Ball[] ballArray;    // array of Balls
 
+SoundFile spawnSound;
+
 void setup() {
     size(640, 480);
     ballArray = new Ball[maxBalls];
+    spawnSound = new SoundFile(this, "spawn.mp3");
 }
 
 void draw() {
@@ -89,6 +94,7 @@ void mouseClicked() {
     // prevent balls from spawning too close to edge and getting stuck
     if (numBalls < maxBalls && mouseY > randDiameter/2.0 && mouseY < height - randDiameter/2.0) {
         ballArray[numBalls] = new Ball(randDiameter, randSpeed);
+        spawnSound.play();
         numBalls++;
     }
 }
