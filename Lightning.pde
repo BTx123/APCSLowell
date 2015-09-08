@@ -1,5 +1,5 @@
 /* Lightning
- * Author: Brian Tom
+ * Author: Brian T
  * Date: 8/31/2015
  * Description: Draws lightning bolts
  */
