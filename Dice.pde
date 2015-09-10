@@ -6,86 +6,92 @@
 
 Die d;
 
+int rows = 2;
+int columns = 2;
+
 void setup() {
-  size(648, 648);
-  noLoop();
+    size(648, 648);
+    noLoop();
 }
 
 void draw() {
-  background(127);
-  println("BG");
-  for (int i = 0; i < 3; i++) {
-    d = new Die(width/2, i*height);
-    d.roll();
-    d.show();
-  }
+    background(127);
+    for (float y = (float) 1/(2*rows)*height; y < height; y += (float) 1/rows*height) {
+        for (float x = (float) 1/(2*columns)*width; x < width; x += (float) 1/columns*width) {
+            println(x, y);
+            d = new Die(x, y);
+            d.roll();
+            d.show();
+        }
+    }
 }
 
 void mousePressed() {
-  redraw();
+    redraw();
 }
 
 // Models one single dice cube
 class Die {
-  float x, y, value;
+    float x, y, dieSize, dotSize, value, dieTotal;
 
-  Die(float tempX, float tempY) {
-    x = tempX;
-    y = tempY;
-    value = 1;
-  }
-
-  void roll() {
-    value = (int) (Math.random()*6) + 1;
-    println(value);
-  }
-
-  void singleDot(float x, float y) {
-    noStroke();
-    fill(0);
-    ellipseMode(CENTER);
-    int size = 20;
-    ellipse(x, y, size, size);
-  }
-
-  void show() {
-    rectMode(CENTER);
-    noStroke();
-    fill(255);
-    int size = 100;
-    rect(x, y, size, size, size/10);
-    if (value == 1 || value == 3 || value == 5) {
-      singleDot(x, y);  // CENTER
-      if (value == 3 || value == 5) {
-        // draw dots on upper left & bottom right
-        singleDot(x - 0.25*size, y - 0.25*size);  // TL
-        singleDot(x + 0.25*size, y + 0.25*size);  // BR
-      }
-      if (value == 5) {
-        // draw dots on upper right & bottom left
-        singleDot(x + 0.25*size, y - 0.25*size);  // TR
-        singleDot(x - 0.25*size, y + 0.25*size);  // BL
-      }
-    } else if (value == 2 || value == 4) {
-      // draw dots on upper left & bottom right
-      singleDot(x - 0.25*size, y - 0.25*size);  // TL
-      singleDot(x + 0.25*size, y + 0.25*size);  // BR
-      if (value == 4) {
-        // draw dots upper right & bottom left
-        singleDot(x + 0.25*size, y - 0.25*size);  // TR
-        singleDot(x - 0.25*size, y + 0.25*size);  // BL
-      }
-    } else if (value == 6) {
-      // draw 3 dots on left & 3 dots on right
-      singleDot(x - 0.25*size, y - 0.25*size);  // TL
-      singleDot(x - 0.25*size, y);  // CL
-      singleDot(x - 0.25*size, y + 0.25*size);  // BL
-      singleDot(x + 0.25*size, y - 0.25*size);  // TR
-      singleDot(x + 0.25*size, y);  // CR
-      singleDot(x + 0.25*size, y + 0.25*size);  // BR
-    } else {
-      println("ERROR: Out of bounds");
+    Die(float tempX, float tempY) {
+        x = tempX;
+        y = tempY;
+        dieSize = 300;
+        dotSize = 0.2*dieSize;
+        value = 1;
+        dieTotal = 0;
     }
-  }
-}
 
+    void roll() {
+        value = (int) (Math.random()*6) + 1;
+        dieTotal += value;
+        println(dieTotal);
+    }
+
+    void singleDot(float x, float y) {
+        noStroke();
+        fill(0);
+        ellipseMode(CENTER);
+        ellipse(x, y, dotSize, dotSize);
+    }
+
+    void show() {
+        rectMode(CENTER);
+        noStroke();
+        fill(255);
+        rect(x, y, dieSize, dieSize, dieSize/10);
+        if (value == 1 || value == 3 || value == 5) {
+            singleDot(x, y);  // CENTER
+            if (value == 3 || value == 5) {
+                // draw dots on upper left & bottom right
+                singleDot(x - 0.25*dieSize, y - 0.25*dieSize);  // TL
+                singleDot(x + 0.25*dieSize, y + 0.25*dieSize);  // BR
+            }
+            if (value == 5) {
+                // draw dots on upper right & bottom left
+                singleDot(x + 0.25*dieSize, y - 0.25*dieSize);  // TR
+                singleDot(x - 0.25*dieSize, y + 0.25*dieSize);  // BL
+            }
+        } else if (value == 2 || value == 4) {
+            // draw dots on upper left & bottom right
+            singleDot(x - 0.25*dieSize, y - 0.25*dieSize);  // TL
+            singleDot(x + 0.25*dieSize, y + 0.25*dieSize);  // BR
+            if (value == 4) {
+                // draw dots upper right & bottom left
+                singleDot(x + 0.25*dieSize, y - 0.25*dieSize);  // TR
+                singleDot(x - 0.25*dieSize, y + 0.25*dieSize);  // BL
+            }
+        } else if (value == 6) {
+            // draw 3 dots on left & 3 dots on right
+            singleDot(x - 0.25*dieSize, y - 0.25*dieSize);  // TL
+            singleDot(x - 0.25*dieSize, y);  // CL
+            singleDot(x - 0.25*dieSize, y + 0.25*dieSize);  // BL
+            singleDot(x + 0.25*dieSize, y - 0.25*dieSize);  // TR
+            singleDot(x + 0.25*dieSize, y);  // CR
+            singleDot(x + 0.25*dieSize, y + 0.25*dieSize);  // BR
+        } else {
+            println("ERROR: Out of bounds");
+        }
+    }
+}
