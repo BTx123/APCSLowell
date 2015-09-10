@@ -6,49 +6,88 @@
 
 Die d;
 
-int rows = 2;
-int columns = 2;
+int rows = 3;
+int columns = 3;
+int dieSize = 100;
+
+PFont font;
 
 void setup() {
-    size(648, 648);
+    size(648, 700);
     noLoop();
+    font = loadFont("AdobeGurmukhi-Bold-48.vlw");
 }
 
 void draw() {
+    int myHeight = width;
+    int dieTotal = 0;
     background(127);
-    for (float y = (float) 1/(2*rows)*height; y < height; y += (float) 1/rows*height) {
+    for (float y = (float) 1/(2*rows)*myHeight; y < myHeight; y += (float) 1/rows*myHeight) {
         for (float x = (float) 1/(2*columns)*width; x < width; x += (float) 1/columns*width) {
-            println(x, y);
-            d = new Die(x, y);
+            d = new Die(x, y, dieSize);
             d.roll();
             d.show();
+            dieTotal += d.value;
         }
+    }
+    // display sum of all dice values
+    textAlign(CENTER, CENTER);
+    textFont(font);
+    text("Total: " + dieTotal, width/2, height - (height - width)/2);
+}
+
+// Randomize dice on click
+void mousePressed() {
+    if (mouseButton == LEFT) {
+        redraw();
     }
 }
 
-void mousePressed() {
-    redraw();
+// Change number of dice rows, columns, & size
+void keyPressed() {
+    // controls number of rows
+    if (key == 'w') {
+        rows++;
+        redraw();
+    } else if (key == 's' && rows > 0) {
+        rows--;
+        redraw();
+    }
+    // controls number of columns
+    if (key == 'a' && columns > 0) {
+        columns--;
+        redraw();
+    } else if (key == 'd') {
+        columns++;
+        redraw();
+    }
+    // controls die size
+    if (key == 'e') {
+        dieSize++;
+        redraw();
+    } else if (key == 'q' && dieSize > 0) {
+        dieSize--;
+        redraw();
+    }
 }
 
 // Models one single dice cube
 class Die {
-    float x, y, dieSize, dotSize, value, dieTotal;
+    float x, y, dieSize, dotSize, value;
 
-    Die(float tempX, float tempY) {
+    Die(float tempX, float tempY, int tempDieSize) {
         x = tempX;
         y = tempY;
-        dieSize = 300;
+        dieSize = tempDieSize;
         dotSize = 0.2*dieSize;
         value = 1;
-        dieTotal = 0;
     }
 
     void roll() {
         value = (int) (Math.random()*6) + 1;
-        dieTotal += value;
-        println(dieTotal);
     }
 
+    // Draw a single dot
     void singleDot(float x, float y) {
         noStroke();
         fill(0);
@@ -56,9 +95,11 @@ class Die {
         ellipse(x, y, dotSize, dotSize);
     }
 
+    // Draw die with dots depending on random value
     void show() {
         rectMode(CENTER);
-        noStroke();
+        strokeWeight(3);
+        stroke(100);
         fill(255);
         rect(x, y, dieSize, dieSize, dieSize/10);
         if (value == 1 || value == 3 || value == 5) {
