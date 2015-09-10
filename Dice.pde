@@ -4,7 +4,7 @@
  * Description: Simulates the rolling of dice.
  */
 
-// TODO: improve dot drawing, shake?
+// TODO: improve dot drawing, shake?, font
 
 Die d;
 
@@ -17,7 +17,7 @@ PFont font;
 void setup() {
     size(648, 700);
     noLoop();
-    font = loadFont("TrebuchetMS-Bold-48.vlw");
+    textFont(loadFont("TrebuchetMS-Bold-48.vlw"));
 }
 
 void draw() {
@@ -35,12 +35,13 @@ void draw() {
     }
     // display sum of all dice values, # of rows & columns, # of dice
     fill(150, 25, 25);
-    textFont(font, 24);
+    textSize(24);
     text("Total Sum: " + diceSum, (float) width/16, (float) (height + width)/2);
     textSize(16);
     text("Rows: " + rows, (float) 7*width/16, (float) (height + width)/2 - 10);
     text("Columns: " + columns, (float) 7*width/16, (float) (height + width)/2 + 10);
-    text("# of Dice: " + rows*columns, (float) 11*width/16, (float) (height + width)/2);
+    text("# of Dice: " + rows*columns, (float) 11*width/16, (float) (height + width)/2 - 10);
+    text("Size: " + dieSize, (float) 11*width/16, (float) (height + width)/2 + 10);
 }
 
 // Randomize dice on click
@@ -81,7 +82,7 @@ void keyPressed() {
 // Models one single dice cube
 class Die {
     float x, y, dieSize, dotSize, value;
-
+    // Constructor
     Die(float tempX, float tempY, int tempDieSize) {
         x = tempX;
         y = tempY;
@@ -89,11 +90,10 @@ class Die {
         dotSize = 0.2*dieSize;
         value = 1;
     }
-
+    // Gives die a random value from 1-6
     void roll() {
         value = (int) (Math.random()*6) + 1;
     }
-
     // Draw a single dot
     void singleDot(float x, float y) {
         noStroke();
@@ -101,7 +101,6 @@ class Die {
         ellipseMode(CENTER);
         ellipse(x, y, dotSize, dotSize);
     }
-
     // Draw die with dots depending on random value
     void show() {
         rectMode(CENTER);
@@ -109,6 +108,7 @@ class Die {
         stroke(50);
         fill(255);
         rect(x, y, dieSize, dieSize, dieSize/10);
+        // draw dot pattern depending on value of die
         if (value == 1 || value == 3 || value == 5) {
             singleDot(x, y);  // CENTER
             if (value == 3 || value == 5) {
