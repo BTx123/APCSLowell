@@ -4,13 +4,13 @@
  * Description: Simulates the rolling of dice.
  */
 
-// TODO: improve dot drawing
+// TODO: improve dot drawing, shake?
 
 Die d;
 
 int rows = 3;
 int columns = 3;
-int dieSize = 100;
+int dieSize = 100;  // sidelength
 
 PFont font;
 
@@ -21,21 +21,22 @@ void setup() {
 }
 
 void draw() {
-    int myHeight = width;
-    int dieTotal = 0;
+    int myHeight = width;  // create square space for dice to be drawn in
+    int diceSum = 0;       // keeps track of sum of all dice values
     background(127);
+    // calculates x & y positions with scaling depending on the number & size of dice
     for (float y = (float) 1/(2*rows)*myHeight; y < myHeight; y += (float) 1/rows*myHeight) {
         for (float x = (float) 1/(2*columns)*width; x < width; x += (float) 1/columns*width) {
             d = new Die(x, y, dieSize);
             d.roll();
             d.show();
-            dieTotal += d.value;
+            diceSum += d.value;  // add value of current Dice d to diceSum
         }
     }
     // display sum of all dice values, # of rows & columns, # of dice
-    fill(255, 0 ,0);
+    fill(150, 25, 25);
     textFont(font, 24);
-    text("Total Sum: " + dieTotal, (float) width/16, (float) (height + width)/2);
+    text("Total Sum: " + diceSum, (float) width/16, (float) (height + width)/2);
     textSize(16);
     text("Rows: " + rows, (float) 7*width/16, (float) (height + width)/2 - 10);
     text("Columns: " + columns, (float) 7*width/16, (float) (height + width)/2 + 10);
@@ -52,10 +53,10 @@ void mousePressed() {
 // Change number of dice rows, columns, & size
 void keyPressed() {
     // controls number of rows
-    if (key == 'w') {
+    if (key == 's') {
         rows++;
         redraw();
-    } else if (key == 's' && rows > 0) {
+    } else if (key == 'w' && rows > 0) {
         rows--;
         redraw();
     }
