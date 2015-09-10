@@ -4,6 +4,8 @@
  * Description: Simulates the rolling of dice.
  */
 
+// TODO: improve dot drawing
+
 Die d;
 
 int rows = 3;
@@ -15,7 +17,7 @@ PFont font;
 void setup() {
     size(648, 700);
     noLoop();
-    font = loadFont("AdobeGurmukhi-Bold-48.vlw");
+    font = loadFont("TrebuchetMS-Bold-48.vlw");
 }
 
 void draw() {
@@ -30,10 +32,14 @@ void draw() {
             dieTotal += d.value;
         }
     }
-    // display sum of all dice values
-    textAlign(CENTER, CENTER);
-    textFont(font);
-    text("Total: " + dieTotal, width/2, height - (height - width)/2);
+    // display sum of all dice values, # of rows & columns, # of dice
+    fill(255, 0 ,0);
+    textFont(font, 24);
+    text("Total Sum: " + dieTotal, (float) width/16, (float) (height + width)/2);
+    textSize(16);
+    text("Rows: " + rows, (float) 7*width/16, (float) (height + width)/2 - 10);
+    text("Columns: " + columns, (float) 7*width/16, (float) (height + width)/2 + 10);
+    text("# of Dice: " + rows*columns, (float) 11*width/16, (float) (height + width)/2);
 }
 
 // Randomize dice on click
@@ -98,8 +104,8 @@ class Die {
     // Draw die with dots depending on random value
     void show() {
         rectMode(CENTER);
-        strokeWeight(3);
-        stroke(100);
+        strokeWeight(0.03*dieSize);
+        stroke(50);
         fill(255);
         rect(x, y, dieSize, dieSize, dieSize/10);
         if (value == 1 || value == 3 || value == 5) {
