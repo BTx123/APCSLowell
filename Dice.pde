@@ -3,12 +3,12 @@
  * Date: 9/8/2015
  * Description: Simulates the rolling of dice.
  */
-
-// TODO: shake?, font
+ 
+// TODO: shake?
 
 Die d;
 
-int rows = 3;
+int rows    = 3;
 int columns = 3;
 int dieSize = 100;  // sidelength
 
@@ -110,6 +110,7 @@ class Die {
     rect(x, y, dieSize, dieSize, dieSize/10);
     // draw dot pattern depending on value of die
     if (value == 1 || value == 3 || value == 5) {
+      // draw single dot in center
       singleDot(x, y);  // CENTER
     }
     if (value == 2 || value == 3 || value == 4 || value == 5 || value == 6) {
