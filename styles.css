@@ -1,11 +1,11 @@
 body {
-    /*background-color: rgb(200,200,200);*/
-	background-image: url(balls.jpg);
-	background-position: center center;
-	background-size: 125%;
+    background-color: rgb(200,200,200);
+    background-image: url(balls.jpg);
+    background-position: center center;
+    background-size: 125%;
     color: rgb(255, 255, 255);
-	font-size: 100%;
-    font-family: "Impact", sans-serif;
+    font-size: 100%;
+    font-family: "Book Antiqua", sans-serif;
     text-align: center;
 }
 
