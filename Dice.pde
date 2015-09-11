@@ -6,7 +6,7 @@
  
 // TODO: shake?
 
-Die d;
+Die d;  // declaration
 
 int rows    = 3;
 int columns = 3;
@@ -27,7 +27,7 @@ void draw() {
   // calculates x & y positions with scaling depending on the number & size of dice
   for (float y = (float) 1/(2*rows)*myHeight; y < myHeight; y += (float) 1/rows*myHeight) {
     for (float x = (float) 1/(2*columns)*width; x < width; x += (float) 1/columns*width) {
-      d = new Die(x, y, dieSize);
+      d = new Die(x, y, dieSize);  // instantiation
       d.roll();
       d.show();
       diceSum += d.value;  // add value of current Dice d to diceSum
