@@ -84,6 +84,7 @@ class Ball {
 
 // Increase number of balls on click
 void mouseClicked() {
+    redraw();
     int randDiameter = (int) (Math.random()*41) + 10;
     int randSpeed = (int) (Math.random()*11) + 5;
     // prevent balls from spawning too close to edge and getting stuck
