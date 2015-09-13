@@ -27,9 +27,9 @@ void draw() {
 void dots(int pointSize, int grayScale, int interval) {
     strokeWeight(pointSize);
     stroke(grayScale);
-    for (int i = interval/2; i < width; i += interval) {
-        for (int j = interval/2; j < height; j += interval) {
-            point(i, j);
+    for (int y = interval/2; y < height; y += interval) {
+        for (int x = interval/2; x < width; x += interval) {
+            point(x, y);
         }
     }
 }
