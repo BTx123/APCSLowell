@@ -29,7 +29,7 @@ void setup()
 void draw()
 {
   background(bgColor);
-  if (!foodPresent)
+  if (foodPresent == false)
     feed();
   for (int i = 0; i < colony.length; i++)
   {
@@ -71,7 +71,6 @@ class Bacteria
     fill(myColor);
     ellipse(x, y, size, size);
   }
-  
   // Remove food when bacteria is on same location
   void eat()
   {
