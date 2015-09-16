@@ -7,6 +7,7 @@
 color bgColor = color(0, 0, 0);
 
 int foodX, foodY, foodCount;
+boolean foodPresent;
 
 Bacteria[] colony;
 BacteriaFood food;
@@ -22,12 +23,14 @@ void setup()
   }
   food = new BacteriaFood();
   foodCount = 0;
+  foodPresent = false
 }
 
 void draw()
 {
   background(bgColor);
-  feed();
+  if (!foodPresent)
+    feed();
   for (int i = 0; i < colony.length; i++)
   {
     colony[i].update();
@@ -73,7 +76,7 @@ class Bacteria
   void eat()
   {
     if (x == food.x && y == food.y)
-      foodCount--;  // remove food
+      foodPresent == false;
   }
 }
 class BacteriaFood
@@ -100,10 +103,6 @@ class BacteriaFood
 void feed()
 {
   food.display();
-  if (foodCount < 1)
-  {
-    food = new BacteriaFood();
-    foodCount++;
-  }
+  foodPresent == true;
 }
 
