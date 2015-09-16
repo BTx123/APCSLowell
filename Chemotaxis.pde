@@ -27,10 +27,10 @@ void setup()
 void draw()
 {
   background(bgColor);
+  feed();
   for (int i = 0; i < colony.length; i++)
   {
     colony[i].update();
-    colony[i].feed();
     colony[i].display();
     colony[i].eat();
   }
@@ -68,16 +68,7 @@ class Bacteria
     fill(myColor);
     ellipse(x, y, size, size);
   }
-  // Feed bacteria if no food is present
-  void feed()
-  {
-    food.display();
-    if (foodCount < 1)
-    {
-      food = new BacteriaFood();
-      foodCount++;
-    }
-  }
+  
   // Remove food when bacteria is on same location
   void eat()
   {
@@ -85,7 +76,6 @@ class Bacteria
       foodCount--;  // remove food
   }
 }
-
 class BacteriaFood
 {
   int x, y;
@@ -103,6 +93,17 @@ class BacteriaFood
     fill(foodColor);
     rectMode(CENTER);
     rect(x, y, foodSize, foodSize);
+  }
+}
+
+// Feed bacteria if no food is present
+void feed()
+{
+  food.display();
+  if (foodCount < 1)
+  {
+    food = new BacteriaFood();
+    foodCount++;
   }
 }
 
