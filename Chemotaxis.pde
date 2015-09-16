@@ -18,7 +18,7 @@ void setup()
   for (int i = 0; i < colony.length; i++)
   {
     color randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
-    colony[i] = new Bacteria(width/2, height/2, 20, randColor);
+    colony[i] = new Bacteria(20, randColor);
   }
   food = new BacteriaFood();
   foodCount = 0;
@@ -41,10 +41,10 @@ class Bacteria
   int x, y, size;
   color myColor;
   // Constructor
-  Bacteria(int tempX, int tempY, int tempSize, color tempColor)
+  Bacteria(int tempSize, color tempColor)
   {
-    x = tempX;
-    y = tempY;
+    x = (int) (Math.random()*width);
+    y = (int) (Math.random()*height);
     size = tempSize;
     myColor = tempColor;
   }
