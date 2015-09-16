@@ -30,8 +30,8 @@ void draw()
   for (int i = 0; i < colony.length; i++)
   {
     colony[i].update();
-    colony[i].display();
     colony[i].feed();
+    colony[i].display();
     colony[i].eat();
   }
 }  
