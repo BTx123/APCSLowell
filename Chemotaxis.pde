@@ -6,7 +6,7 @@
 
 color bgColor = color(0, 0, 0);
 
-int foodX, foodY, foodCount;
+int foodX, foodY;
 boolean foodPresent;
 
 Bacteria[] colony;
@@ -15,13 +15,12 @@ BacteriaFood food;
 void setup()
 {     
   size(1280, 720);
-  colony = new Bacteria[10];
+  colony = new Bacteria[10];  // Make colony of 10 Bacteria
   for (int i = 0; i < colony.length; i++)
   {
     color randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
-    colony[i] = new Bacteria(20, randColor);
+    colony[i] = new Bacteria(20, randColor);  // instantiate each bacteria with random color
   }
-  foodCount = 0;
   foodPresent = false;
 }
 
