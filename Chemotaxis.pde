@@ -51,7 +51,6 @@ void draw()
 //  // Update locations of bacteria depending on food location
 //  void update()
 //  {
-//    float prob = 0.0;
 //    if (x < food.x)
 //      x += 1;
 //    if (x > food.x)
@@ -85,7 +84,7 @@ class Bacteria
   Bacteria(int tempSize, color tempColor)
   {
     location = new PVector((int) (Math.random()*width), (int) (Math.random()*height));
-    velocity = new PVector(2, 1);
+    velocity = new PVector(2, 2);
     size = tempSize;
     myColor = tempColor;
   }
@@ -93,13 +92,22 @@ class Bacteria
   void update()
   {
     if (location.x < food.x)
-      location.x += velocity.x;
+     location.x += velocity.x;
     if (location.x > food.x)
-      location.x -= velocity.x;
+     location.x -= velocity.x;
     if (location.y < food.y)
-      location.y += velocity.x;
+     location.y += velocity.x;
     if (location.y > food.y)
-      location.y -= velocity.x;
+     location.y -= velocity.x;
+    //float rand = Math.random();  // biased random direction
+    //if (rand < 0.4)
+    // move closer to food (shortest distance)
+    //else if (rand < 0.6)
+    // move other direction
+    //else if (rand < 0.8)
+    // move other direction
+    //else
+    // move other direction
   }
   // Display bacteria on canvas
   void display()
@@ -114,9 +122,27 @@ class Bacteria
     if (location.x >= food.x-1 && location.x <= food.x+1 && location.y >= food.y-1 && location.y <= food.y+1)
     {
       foodPresent = false;
-      size += 5;
+      size += 5;  // bacteria grows bigger
     }
   }
+  // determine which perpendicular distance to food is shortest
+  //int shortestDistance()
+  //{
+  //  float distX = abs(location.x - food.x);
+  //  float distY = abs(location.y - food.y);
+  //  if (distX > distY)
+  //  {
+  //    if (location.x < food.x)
+  //      return 1;
+  //    return 3;
+  //  }
+  //  else
+  //  {
+  //    if (location.y < food.y)
+  //      return 2;
+  //    return 0;
+  //  }
+  //}
 }
 // Food for bacteria to eat
 class BacteriaFood
