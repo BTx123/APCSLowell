@@ -21,16 +21,16 @@ void setup()
     color randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
     colony[i] = new Bacteria(20, randColor);
   }
-  food = new BacteriaFood();
   foodCount = 0;
-  foodPresent = false
+  foodPresent = false;
 }
 
 void draw()
 {
   background(bgColor);
-  if (foodPresent == false)
-    feed();
+  if (!foodPresent)
+    food = new BacteriaFood();
+  feed();
   for (int i = 0; i < colony.length; i++)
   {
     colony[i].update();
@@ -75,7 +75,8 @@ class Bacteria
   void eat()
   {
     if (x == food.x && y == food.y)
-      foodPresent == false;
+      foodPresent = false;
+    println(foodPresent);
   }
 }
 class BacteriaFood
@@ -102,6 +103,5 @@ class BacteriaFood
 void feed()
 {
   food.display();
-  foodPresent == true;
+  foodPresent = true;
 }
-
