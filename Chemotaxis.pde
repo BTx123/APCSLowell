@@ -4,10 +4,10 @@
  * Description: Simulates the movement of bacteria using random walks.
  */
 
-color bgColor = color(0, 0, 0);
+int bgColor = color(0, 0, 0);  // background color
 
-int foodX, foodY;
-boolean foodPresent = false;
+int foodX, foodY;              // position of food
+boolean foodPresent = false;   // food is not on canvas
 
 Bacteria[] colony;
 BacteriaFood food;
@@ -16,10 +16,10 @@ void setup()
 {     
   size(1280, 720);
   colony = new Bacteria[10];  // Make colony of 10 Bacteria
-  for (int i = 0; i < colony.length; i++)
+  for (int i = 0; i < colony.length; i++)  // instantiate each bacteria 
   {
-    color randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
-    colony[i] = new Bacteria(20, randColor);  // instantiate each bacteria with random color
+    int randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
+    colony[i] = new Bacteria(20, randColor);  // random color
   }
 }
 void draw()
@@ -27,7 +27,7 @@ void draw()
   background(bgColor);
   if (!foodPresent)
     food = new BacteriaFood();
-  feed();
+  food.display();
   for (int i = 0; i < colony.length; i++)
   {
     colony[i].update();
@@ -35,70 +35,35 @@ void draw()
     colony[i].eat();
   }
 }
-
-//class Bacteria
-//{
-//  int x, y, size;
-//  color myColor;
-//  // Constructor
-//  Bacteria(int tempSize, color tempColor)
-//  {
-//    x = (int) (Math.random()*width);
-//    y = (int) (Math.random()*height);
-//    size = tempSize;
-//    myColor = tempColor;
-//  }
-//  // Update locations of bacteria depending on food location
-//  void update()
-//  {
-//    if (x < food.x)
-//      x += 1;
-//    if (x > food.x)
-//      x -= 1;
-//    if (y < food.y)
-//      y += 1;
-//    if (y > food.y)
-//      y -= 1;
-//  }
-//  // Display bacteria on canvas
-//  void display()
-//  {
-//    noStroke();
-//    fill(myColor);
-//    ellipse(x, y, size, size);
-//  }
-//  // Remove food when bacteria is on same location
-//  void eat()
-//  {
-//    if (x == food.x && y == food.y)
-//      foodPresent = false;
-//    println(foodPresent);
-//  }
-//}
+// Simulate bacteria
 class Bacteria
 {
-  PVector location, velocity;
-  int size;
-  color myColor;
+  PVector location, vx, vy;
+  int size, myColor;
   // Constructor
-  Bacteria(int tempSize, color tempColor)
+  Bacteria(int tempSize, int tempColor)
   {
     location = new PVector((int) (Math.random()*width), (int) (Math.random()*height));
-    velocity = new PVector(2, 2);
+    vx = new PVector(2, 0);
+    vy = new PVector(0, 2);
     size = tempSize;
     myColor = tempColor;
   }
   // Update locations of bacteria depending on food location
   void update()
   {
-    if (location.x < food.x)
-     location.x += velocity.x;
-    if (location.x > food.x)
-     location.x -= velocity.x;
-    if (location.y < food.y)
-     location.y += velocity.x;
-    if (location.y > food.y)
-     location.y -= velocity.x;
+    //    if (!foodPresent)
+    //    {
+    //      location = location + velocity;
+    //    }
+    if (location.x < food.location.x)
+      location.add(vx);
+    if (location.x > food.location.x)
+      location.sub(vx);
+    if (location.y < food.location.y)
+      location.add(vy);
+    if (location.y > food.location.y)
+      location.sub(vy);
     //float rand = Math.random();  // biased random direction
     //if (rand < 0.4)
     // move closer to food (shortest distance)
@@ -119,10 +84,12 @@ class Bacteria
   // Remove food when bacteria is on same location
   void eat()
   {
-    if (location.x >= food.x-1 && location.x <= food.x+1 && location.y >= food.y-1 && location.y <= food.y+1)
+    // if (location.x >= food.x-1 && location.x <= food.x+1 && location.y >= food.y-1 && location.y <= food.y+1)
+    if (get((int) food.location.x, (int) food.location.y) != color(food.foodColor))
     {
       foodPresent = false;
       size += 5;  // bacteria grows bigger
+      
     }
   }
   // determine which perpendicular distance to food is shortest
@@ -147,26 +114,22 @@ class Bacteria
 // Food for bacteria to eat
 class BacteriaFood
 {
-  int x, y;
+  PVector location;
+  int foodColor;
   // Constructor
   BacteriaFood()
   {
-    x = (int) (Math.random()*width);
-    y = (int) (Math.random()*height);
+    location = new PVector((float) Math.random()*width, (float) Math.random()*height);
+    foodColor = color(220, 240, 250);
   }
   void display()
   {
+    foodPresent = true;
     int foodSize = 10;
-    color foodColor = color(220, 240, 250);
     noStroke();
     fill(foodColor);
     rectMode(CENTER);
-    rect(x, y, foodSize, foodSize);
+    rect(location.x, location.y, foodSize, foodSize);
   }
 }
-// Feed bacteria if no food is present
-void feed()
-{
-  food.display();
-  foodPresent = true;
-}
+
