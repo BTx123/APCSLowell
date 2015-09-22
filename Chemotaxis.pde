@@ -20,32 +20,41 @@ void setup() {
     colony[i] = new Bacteria(20, randColor);  // random color
   }
 }
+
 void draw() {
   background(bgColor);
-  if (!foodPresent)  // create new food if there is no food present
-      food = new BacteriaFood();
-  food.display();  // display food if not food present
+
+
   for (int i = 0; i < colony.length; i++) {
+    if (!foodPresent)  // create new food if there is no food present
+        food = new BacteriaFood();
+    food.display();  // display food if not food present
     colony[i].update();
     colony[i].display();
     colony[i].eat();
   }
 }
+
 // Simulate bacteria
 class Bacteria {
+  int size, myColor;
+  float velocity;
   PVector location, vx, vy;
-  int velocity, size, myColor;
   // Constructor
   Bacteria(int tempSize, int tempColor) {
     location = new PVector((int) (Math.random()*width), (int) (Math.random()*height));
-    velocity = 1;
-    vx = new PVector(velocity, 0);
-    vy = new PVector(0, velocity);
     size = tempSize;
     myColor = tempColor;
+    velocity = 3.0;
+    vx = new PVector(velocity, 0);
+    vy = new PVector(0, velocity);
+    
   }
   // Update locations of bacteria depending on food location
   void update() {
+    velocity = 60/size;  // reduce velocity based on size
+    vx.x = velocity;
+    vy.y = velocity;
     float rFood = (float) Math.random();
     float probToFood = 0.25;  // chance for bacteria to move towards food
     if (rFood < probToFood) {
@@ -86,6 +95,7 @@ class Bacteria {
     }
   }
 }
+
 // Food for bacteria to eat
 class BacteriaFood {
   PVector location;
