@@ -46,20 +46,32 @@ class Bacteria {
     location = new PVector((int) (Math.random()*width), (int) (Math.random()*height));
     size = tempSize;
     myColor = tempColor;
-    lifespan = 255;
+    lifespan = 5*size;
     velocity = (float) Math.random()*6;
     vx = new PVector(velocity, 0);
     vy = new PVector(0, velocity);
   }
   // Update locations of bacteria depending on food location
   void update() {
-    velocity = (float) Math.random() * (4-(size-10)/10);  // reduce velocity based on size
+    velocity = (float) Math.random()*6;  // TODO: reduce velocity based on size
     vx.x = velocity;
     vy.y = velocity;
-    float rFood = (float) Math.random();
-    float probToFood = 0.1;  // chance for bacteria to move towards food
-    if (rFood < probToFood) {
-      // move toawrds food
+    float r = (float) Math.random();
+    float probToMouse = 0.3;
+    float probToFood = (float) 10/dist(location.x, location.y, food.location.x, food.location.y);  // chance for bacteria to move towards food is higher if closer
+    if (mousePressed && r < probToMouse) {
+      // move towards mouse
+      if (location.x < mouseX)
+        location.add(vx);
+      if (location.x > mouseX)
+        location.sub(vx);
+      if (location.y < mouseY)
+        location.add(vy);
+      if (location.y > mouseY)
+        location.sub(vy);
+    } else if (r < probToFood) {
+      println(probToFood);
+      // move towards food
       if (location.x < food.location.x)
         location.add(vx);
       if (location.x > food.location.x)
@@ -80,7 +92,9 @@ class Bacteria {
       else
         location.sub(vy);
     }
-    lifespan -= 2;  // reduce lifespan
+    location.x = constrain(location.x, 0, width-1);
+    location.y = constrain(location.y, 0, height-1);
+    lifespan -= 1;  // reduce lifespan
   }
   // Display bacteria on canvas
   void display() {
@@ -94,11 +108,22 @@ class Bacteria {
     if (get((int) food.location.x, (int) food.location.y) != color(food.foodColor)) {
       foodPresent = false;
       size += food.foodSize;  // bacteria grows bigger
-      lifespan += food.foodSize;  // increase lifespan
+      lifespan += 10*food.foodSize;  // increase lifespan
     }
   }
   boolean isDead() {
-    return true;
+    if (lifespan <= 0)
+      return true;
+    return false;
+  }
+  float monteCarlo() {
+    while (true) {
+      float r1 = (float) Math.random();
+      float probability = r1*r1;
+      float r2 = (float) Math.random();
+      if (r2 < probability)
+        return r1;
+    }
   }
 }
 
@@ -109,8 +134,8 @@ class BacteriaFood {
   // Constructor
   BacteriaFood() {
     location = new PVector((float) Math.random()*width, (float) Math.random()*height);
-    foodColor = color(220, 240, 250);
-    foodSize = 10;
+    foodColor = color(255, 255, 200);
+    foodSize = (int) (Math.random()*11) + 5;
   }
   void display() {
     foodPresent = true;
