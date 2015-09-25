@@ -53,7 +53,18 @@ class Bacteria {
   }
   // Update locations of bacteria depending on food location
   void update() {
-    velocity = (float) Math.random()*6;  // TODO: reduce velocity based on size
+    if (size >= 250)
+      velocity = 1;
+    else if (size >= 200)
+      velocity = (float) Math.random()*2 + 1;
+    else if (size >= 150)
+      velocity = (float) Math.random()*3 + 1;
+    else if (size >= 100)
+      velocity = (float) Math.random()*4 + 1;
+    else if (size >= 50)
+      velocity = (float) Math.random()*5 + 1;
+    else
+      velocity = (float) Math.random()*6 + 1;
     vx.x = velocity;
     vy.y = velocity;
     float r = (float) Math.random();
@@ -70,7 +81,6 @@ class Bacteria {
       if (location.y > mouseY)
         location.sub(vy);
     } else if (r < probToFood) {
-      println(probToFood);
       // move towards food
       if (location.x < food.location.x)
         location.add(vx);
@@ -92,7 +102,7 @@ class Bacteria {
       else
         location.sub(vy);
     }
-    location.x = constrain(location.x, 0, width-1);
+    location.x = constrain(location.x, 0, width-1);  // keep bacteria on screen
     location.y = constrain(location.y, 0, height-1);
     lifespan -= 1;  // reduce lifespan
   }
