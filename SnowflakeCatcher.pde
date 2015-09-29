@@ -1,13 +1,14 @@
 /* Snowflake Catcher
  * Author: Brian Tom
  * Date: 9/14/2015
- * Description: Simulates the movement of bacteria using random walks.
+ * Description: Simulates snowflakes with a snowflake catcher.
  */
 
-Snowflake[] arr = new Snowflake[100];
+Snowflake[] arr = new Snowflake[200];
 
 void setup() {
   size(1280, 720);
+  smooth();
   background(0);
   for (int i = 0; i < arr.length; i++) {
     arr[i] = new Snowflake();
@@ -17,13 +18,25 @@ void draw() {
   for (int i = 0; i < arr.length; i++) {
     arr[i].erase();
     arr[i].lookDown();
-    arr[i].move();
+    arr[i].update();
     arr[i].wrap();
-    arr[i].show();
+    arr[i].display();
   }
 }
 void mouseDragged() {
-  //your code here
+  int mySize;
+  if (mouseButton == LEFT) {
+    mySize = 30;
+    noStroke();
+    fill(0, 255, 0);
+    ellipse(mouseX, mouseY, mySize, mySize);
+  }
+  if (mouseButton == RIGHT) {
+    mySize = 40;
+    noStroke();
+    fill(0);
+    ellipse(mouseX, mouseY, mySize, mySize);
+  }
 }
 
 class Snowflake {
@@ -37,32 +50,34 @@ class Snowflake {
     isMoving = true;
     mySize = 10;
   }
-  // Draws snowflake
-  void show() {
-    noStroke();
-    fill(255);
-    ellipse(x, y, mySize, mySize);
-  }
-  // Checks if snowflase is on screen and color below it is black
-  void lookDown() {
-    if ((y >= 0 && y <= height) && get(x, y+1) != color(0)) isMoving = false;
-    isMoving = true;
-  }
   // Erases snowflake by drawing black ellipse over it
   void erase() {
     fill(0);
-    ellipse(x, y, mySize+1, mySize+1);
+    ellipse(x, y, mySize+2, mySize+2);
+  }
+  // Checks if snowflake is on screen and color below it is black'
+  // TODO: Fix snowflakes getting stuck on bottom of screen
+  void lookDown() {
+    if ((y >= mySize/2 && y <= height-mySize/2) && get(x, y+5) != color(0)) isMoving = false;
+    else isMoving = true;
   }
   // Move the snowflake downwards
-  void move() {
+  void update() {
+    println(isMoving);
     if (isMoving) y++;
   }
   // Redraws snowflake at top of screen with random x position
   void wrap() {
-    if (y > height) {
+    if (y > height+mySize/2) {
       y = 0;
       x = (int) (Math.random()*width);
     }
+  }
+  // Draws snowflake
+  void display() {
+    noStroke();
+    fill(255);
+    ellipse(x, y, mySize, mySize);
   }
 }
 
