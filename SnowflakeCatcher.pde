@@ -16,8 +16,8 @@ void setup() {
 }
 void draw() {
   for (int i = 0; i < arr.length; i++) {
-    arr[i].erase();
     arr[i].lookDown();
+    arr[i].erase();
     arr[i].update();
     arr[i].wrap();
     arr[i].display();
@@ -26,13 +26,13 @@ void draw() {
 void mouseDragged() {
   int mySize;
   if (mouseButton == LEFT) {
-    mySize = 30;
+    mySize = 50;
     noStroke();
     fill(0, 255, 0);
     ellipse(mouseX, mouseY, mySize, mySize);
   }
   if (mouseButton == RIGHT) {
-    mySize = 40;
+    mySize = 60;
     noStroke();
     fill(0);
     ellipse(mouseX, mouseY, mySize, mySize);
@@ -51,19 +51,19 @@ class Snowflake {
     mySize = 10;
   }
   // Erases snowflake by drawing black ellipse over it
+  // TODO: Fix snowflake trails
   void erase() {
+    noStroke();
     fill(0);
-    ellipse(x, y, mySize+2, mySize+2);
+    ellipse(x, y, mySize, mySize);
   }
   // Checks if snowflake is on screen and color below it is black'
-  // TODO: Fix snowflakes getting stuck on bottom of screen
   void lookDown() {
-    if ((y >= mySize/2 && y <= height-mySize/2) && get(x, y+5) != color(0)) isMoving = false;
+    if ((y >= mySize/2 && y <= height-mySize/2-1) && get(x, y+mySize/2) != color(0)) isMoving = false;
     else isMoving = true;
   }
   // Move the snowflake downwards
   void update() {
-    println(isMoving);
     if (isMoving) y++;
   }
   // Redraws snowflake at top of screen with random x position
