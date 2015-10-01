@@ -4,20 +4,21 @@
  * Description: Simulates snowflakes with a snowflake catcher.
  */
 
-Snowflake[] arr = new Snowflake[200];
+Snowflake[] arr = new Snowflake[100];
+int bgColor = color(0);
 
 void setup() {
-  size(1280, 720);
+  size(300, 300);
   smooth();
-  background(0);
+  background(bgColor);
   for (int i = 0; i < arr.length; i++) {
     arr[i] = new Snowflake();
   }
 }
 void draw() {
   for (int i = 0; i < arr.length; i++) {
-    arr[i].lookDown();
     arr[i].erase();
+    arr[i].lookDown();
     arr[i].update();
     arr[i].wrap();
     arr[i].display();
@@ -26,16 +27,16 @@ void draw() {
 void mouseDragged() {
   int mySize;
   if (mouseButton == LEFT) {
-    mySize = 50;
-    noStroke();
-    fill(0, 255, 0);
-    ellipse(mouseX, mouseY, mySize, mySize);
+    mySize = 5;
+    strokeWeight(mySize);
+    stroke(0, 255, 0);
+    line(pmouseX, pmouseY, mouseX, mouseY);
   }
   if (mouseButton == RIGHT) {
-    mySize = 60;
-    noStroke();
-    fill(0);
-    ellipse(mouseX, mouseY, mySize, mySize);
+    mySize = 30;
+    strokeWeight(mySize);
+    stroke(bgColor);
+    line(pmouseX, pmouseY, mouseX, mouseY);
   }
 }
 
@@ -48,18 +49,18 @@ class Snowflake {
     x = (int) (Math.random()*width);
     y = (int) (Math.random()*height);
     isMoving = true;
-    mySize = 10;
+    mySize = 6;
   }
   // Erases snowflake by drawing black ellipse over it
   // TODO: Fix snowflake trails
   void erase() {
     noStroke();
-    fill(0);
-    ellipse(x, y, mySize, mySize);
+    fill(bgColor);
+    ellipse(x, y, mySize+2, mySize+2);
   }
   // Checks if snowflake is on screen and color below it is black'
   void lookDown() {
-    if ((y >= mySize/2 && y <= height-mySize/2-1) && get(x, y+mySize/2) != color(0)) isMoving = false;
+    if ((y > 0 && y < (float) height-5) && get(x, y+4) != color(bgColor)) isMoving = false;
     else isMoving = true;
   }
   // Move the snowflake downwards
@@ -68,7 +69,7 @@ class Snowflake {
   }
   // Redraws snowflake at top of screen with random x position
   void wrap() {
-    if (y > height+mySize/2) {
+    if (y > height) {
       y = 0;
       x = (int) (Math.random()*width);
     }
