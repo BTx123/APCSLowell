@@ -1,9 +1,9 @@
 
 body {
-    background-color: rgb(200,200,200);
 	background-image: url("snow.jpg");
     color: rgb(175, 238, 238);
     font-family: 'Montserrat', sans-serif;
+	font-size: 100%;
     text-align: center;
 }
 
@@ -18,7 +18,7 @@ header {
 }
 
 footer {
+	font-size: 1.0em;
 	font-style: italic;
-	font-size: 90%;
 }
 
