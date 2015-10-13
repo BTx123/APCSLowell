@@ -20,12 +20,18 @@ void setup() {
 }
 
 void draw() {
-  background(bgColor);
+  screenFade(25);
   for (int i = 0; i < particles.length; i++) {
     particles[i].update();
     particles[i].respawn();
     particles[i].display();
   }
+}
+// Leave partial traces of objects on screen
+void screenFade(int myLength) {
+  rectMode(LEFT);
+  fill(bgColor, myLength);
+  rect(0, 0, width, height);
 }
 // Particle interface with basic functions
 interface Particle {
@@ -33,7 +39,7 @@ interface Particle {
   public void display();
   public void respawn();
 }
-
+// Particles that make up most of the simulation
 class NormalParticle implements Particle {
   double x, y, theta, speed, mySize, sizeF;
   int myColor;
@@ -72,29 +78,30 @@ class NormalParticle implements Particle {
     }
   }
 }
-
+// An alien ship orbiting the center of the screen
 class OddballParticle implements Particle {  // uses an interface
   double x, y, theta, radius, mySize;
-  int myColor;
+  int bodyColor, alienColor;
   OddballParticle() {
     x = width/2;
     y = height/2;
-    myColor = color(255);
+    bodyColor = color(80, 230, 255);
+    alienColor = color(90, 255, 80);
     theta = 0;
     radius = 250;
-    mySize = 50;
+    mySize = 25*Math.cos(theta);
   }
   void update() {
     theta += TWO_PI/500;
     x = width/2 + Math.cos(theta)*radius;
     y = height/2 + Math.sin(theta)*radius;
+    mySize = 50*Math.sin(theta);
   }
   void display() {
     noStroke();
-    fill(myColor);
-    ellipse((float) x, (float) y, (float) mySize, (float) mySize);
-    rectMode(CENTER);
-    rect((float) x, (float) y, (float) (1.5*mySize), (float) (0.25*mySize), 10);
+    // body
+    fill(bodyColor);
+    ellipse((float) x, (float) y, (float) mySize*3, (float) mySize);
   }
   void respawn() {
     double adj = mySize/2;
@@ -105,7 +112,7 @@ class OddballParticle implements Particle {  // uses an interface
     }
   }
 }
-
+// A larger than normal particle
 class JumboParticle extends NormalParticle {  // uses inheritance
   int maxSize = 100;
   JumboParticle() {
