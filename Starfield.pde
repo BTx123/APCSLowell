@@ -13,8 +13,8 @@ void setup() {
   smooth();
   particles = new Particle[150];
   for (int i = 0; i < particles.length; i++) {
-    if (i == particles.length-2) particles[i] = new OddballParticle();
-    else if (i == particles.length-1) particles[i] = new JumboParticle();
+    if (i == particles.length-2) particles[i] = new JumboParticle();
+    else if (i == particles.length-1) particles[i] = new OddballParticle();
     else particles[i] = new NormalParticle();
   }
 }
@@ -74,20 +74,20 @@ class NormalParticle implements Particle {
 }
 
 class OddballParticle implements Particle {  // uses an interface
-  double x, y, theta, speed, mySize;
+  double x, y, theta, radius, mySize;
   int myColor;
   OddballParticle() {
     x = width/2;
     y = height/2;
     myColor = color(255);
-    theta = Math.random()*TWO_PI;
-    speed = 5;
+    theta = 0;
+    radius = 250;
     mySize = 50;
   }
   void update() {
-    theta = Math.random()*TWO_PI;
-    x += Math.cos(theta)*speed;
-    y += Math.sin(theta)*speed;
+    theta += TWO_PI/500;
+    x = width/2 + Math.cos(theta)*radius;
+    y = height/2 + Math.sin(theta)*radius;
   }
   void display() {
     noStroke();
