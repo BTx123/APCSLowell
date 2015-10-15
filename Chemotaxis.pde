@@ -23,8 +23,8 @@ void setup() {
 }
 
 void draw() {
-  fill(bgColor, 25);
   rectMode(LEFT);
+  fill(bgColor, 50);
   rect(0, 0, width, height);
   for (int i = 0; i < colony.length; i++) {
     if (!foodPresent)  // create new food if there is no food present
