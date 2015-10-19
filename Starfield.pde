@@ -82,6 +82,7 @@ class NormalParticle implements Particle {
 class OddballParticle implements Particle {  // uses an interface
   double x, y, theta, radius, mySize;
   int bodyColor, alienColor;
+  // Constructor
   OddballParticle() {
     x = width/2;
     y = height/2;
@@ -91,17 +92,21 @@ class OddballParticle implements Particle {  // uses an interface
     radius = 250;
     mySize = 25*Math.cos(theta);
   }
+  // Update position and size of ship
   void update() {
     theta += TWO_PI/500;
     x = width/2 + Math.cos(theta)*radius;
     y = height/2 + Math.sin(theta)*radius;
-    mySize = 50*Math.sin(theta);
+    mySize = 0.15*radius*Math.sin(theta);
   }
+  // Display ship
   void display() {
     noStroke();
     // body
+    fill(alienColor);
+    ellipse((float) x, (float) (y - 0.5*mySize), (float) mySize, (float) mySize);
     fill(bodyColor);
-    ellipse((float) x, (float) y, (float) mySize*3, (float) mySize);
+    ellipse((float) x, (float) y, (float) (3*mySize), (float) mySize);
   }
   void respawn() {
     double adj = mySize/2;
