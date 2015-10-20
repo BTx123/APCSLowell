@@ -1,6 +1,11 @@
+/* OldMacDonald
+ * Author: Brian Tom
+ * Date: 10/20/2015
+ * Description: Farm
+ */
 
-void setup()
-{
-	//your variable declarations here
+void setup() {
+  Farm f = new Farm();
+  f.animalSounds();
 }
 
