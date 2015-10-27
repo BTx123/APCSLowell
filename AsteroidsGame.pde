@@ -6,14 +6,13 @@ public void draw() {
   //your code here
 }
 class SpaceShip extends Floater {
-  private int[] myXs, myYs;
   SpaceShip() {
     corners = 26;
-    int[] myXs = { 
+    private int[] myXs = { 
       18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -14, 
       -14, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
     };
-    int[] myYs = { 
+    private int[] myYs = { 
       2, 6, 10, 10, 6, 4, 4, 10, 10, 8, 6, 4, 4, 
       -4, -4, -6, -8, -10, -10, -4, -4, -6, -10, -10, -6, -2
     };
@@ -21,6 +20,7 @@ class SpaceShip extends Floater {
     yCorners = myYs;
     myCenterX = myCenterY = 0;
   }
+  public getX() { return xCorners; }
 }
 abstract class Floater {  //Do NOT modify the Floater class! Make changes in the SpaceShip class
   protected int corners;  //the number of corners, a triangular floater has 3
