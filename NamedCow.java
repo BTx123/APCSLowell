@@ -1,5 +1,5 @@
 class NamedCow extends Cow {
-  private String myType, myName, mySound;
+  private String myName;
   public NamedCow(String tempType, String tempName, String tempSound) {
     myType = tempType;
     myName = tempName;
@@ -10,13 +10,7 @@ class NamedCow extends Cow {
     myName = "unknown";
     mySound = "unknown";
   }
-  public String getType() {
-    return myType;
-  }
   public String getName() {
     return myName;
-  }
-  public String getSound() {
-    return mySound;
   }
 }
