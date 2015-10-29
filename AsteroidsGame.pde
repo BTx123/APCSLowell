@@ -1,12 +1,53 @@
-//your variable declarations here
+/* Asteroids Game
+ * Author: Brian Tom
+ * Date: 10/27/15
+ * Description: Replica of the classic Asteroids game
+ */
+
+int bgColor = color(0);
+
+Floater s;
+
 public void setup() {
-  //your code here
+  size(1280, 720);
+  smooth();
+  s = new SpaceShip();
 }
 public void draw() {
-  //your code here
+  background(bgColor);
+  s.move();
+  s.show();
+}
+public void keyPressed() {
+  double accelerationF = 0.5;
+  int rotationF = 3;  // rotation in degrees
+  if (key == 'w') {
+    s.accelerate(accelerationF);
+  }
+  if (key == 's') {
+    s.accelerate(-accelerationF);
+  }
+  if (key == 'a') {
+    s.setPointDirection((int) s.getPointDirection() - rotationF);
+    s.rotate(-rotationF);
+  }
+  if (key == 'd') {
+    s.setPointDirection((int) s.getPointDirection() + rotationF);
+    s.rotate(rotationF);
+  }
+  if (keyCode == CONTROL) {
+    double reducF = 0.5;
+    if ((Math.abs(s.getDirectionX()) <= 0.5)) { s.setDirectionX(0); }
+    if ((Math.abs(s.getDirectionY()) <= 0.5)) { s.setDirectionY(0); }
+    if (s.getDirectionX() > 0) { s.setDirectionX(s.myDirectionX - reducF); }
+    else if (s.getDirectionX() < 0) { s.setDirectionX(s.myDirectionX + reducF); }
+    if (s.getDirectionY() > 0) { s.setDirectionY(s.myDirectionY - reducF); }
+    else if (s.getDirectionY() < 0) { s.setDirectionY(s.myDirectionY + reducF); }
+  }
 }
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
+  private final double MAX_SPEED;
   SpaceShip() {
     corners = 26;
     myXs = new int[] { 
@@ -19,11 +60,13 @@ class SpaceShip extends Floater {
     };
     xCorners = myXs;
     yCorners = myYs;
-    myColor = color(255, 255, 255);
-    myCenterX = myCenterY = 0;
+    myColor = color(255);
+    myCenterX = width/2;
+    myCenterY = height/2;
     myDirectionX = 0;
     myDirectionY = 0;
     myPointDirection = 0;
+    MAX_SPEED = 10;
   }
   public void setX(int tempX) { myCenterX = tempX; }
   public int getX() { return 0; }
@@ -35,7 +78,14 @@ class SpaceShip extends Floater {
   public double getDirectionY() { return myDirectionY; }
   public void setPointDirection(int tempDegrees) { myPointDirection = tempDegrees; }
   public double getPointDirection() { return myPointDirection; }
-  
+  // Accelerates the floater in the direction it is pointing (myPointDirection)
+  public void accelerate(double dAmount) {
+    // convert the current direction the floater is pointing to radians
+    double dRadians = myPointDirection * (Math.PI/180);
+    // change coordinates of direction of travel
+    myDirectionX += ((dAmount) * Math.cos(dRadians));
+    myDirectionY += ((dAmount) * Math.sin(dRadians));
+  }
 }
 abstract class Floater {  // Do NOT modify the Floater class! Make changes in the SpaceShip class
   protected int corners;  // the number of corners, a triangular floater has 3
@@ -56,36 +106,36 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
   abstract public void setPointDirection(int degrees);
   abstract public double getPointDirection();
   // Accelerates the floater in the direction it is pointing (myPointDirection)
-  public void accelerate (double dAmount) {
+  public void accelerate(double dAmount) {
     // convert the current direction the floater is pointing to radians
-    double dRadians = myPointDirection*(Math.PI/180);
+    double dRadians = myPointDirection * (Math.PI/180);
     // change coordinates of direction of travel
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
   }
   // Rotates the floater by a given number of degrees
-  public void rotate (int nDegreesOfRotation) {     
-    myPointDirection+=nDegreesOfRotation;
+  public void rotate(int nDegreesOfRotation) {     
+    myPointDirection += nDegreesOfRotation;
   }
   // Move the floater in the current direction of travel
-  public void move () {  
+  public void move() {  
     // change the x and y coordinates by myDirectionX and myDirectionY
     myCenterX += myDirectionX;
     myCenterY += myDirectionY;
     // wrap around screen
-    if (myCenterX >width) {
+    if (myCenterX > width) {
       myCenterX = 0;
-    } else if (myCenterX<0) {     
+    } else if (myCenterX < 0) {     
       myCenterX = width;
     }
-    if (myCenterY >height) {    
+    if (myCenterY > height) {    
       myCenterY = 0;
     } else if (myCenterY < 0) {     
       myCenterY = height;
     }
   }
   // Draws the floater at the current position
-  public void show () {
+  public void show() {
     fill(myColor);
     stroke(myColor);
     //convert degrees to radians for sin and cos
