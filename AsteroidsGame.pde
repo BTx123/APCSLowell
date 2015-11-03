@@ -4,47 +4,73 @@
  * Description: Replica of the classic Asteroids game
  */
 
+// TODO Engine fire
+// TODO Smooth out spaceship movement
+
 int bgColor = color(0);
 
+// Declarations
 Floater s;
+Star[] stars;
 
+// Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
   smooth();
+  stars = new Star[100];
+  for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   s = new SpaceShip();
 }
+// Display the game
 public void draw() {
-  background(bgColor);
+  screenFade();
+  for (int i = 0; i < stars.length; i++) stars[i].display();
   s.move();
   s.show();
 }
-public void keyPressed() {
-  double accelerationF = 0.5;
-  int rotationF = 3;  // rotation in degrees
-  if (key == 'w') {
-    s.accelerate(accelerationF);
+// Fade the screen slightly to create motion blur
+public void screenFade() {
+  noStroke();
+  fill(bgColor, 150);
+  rect(0, 0, width-1, height-1);
+}
+// Draws monochromatic stars
+class Star {
+  private float myX, myY, myR;
+  private int myColor;
+  public Star() {
+    myX = (float) Math.random()*width;
+    myY = (float) Math.random()*height;
+    myR = (float) Math.random()*51 + 5;
+    myColor = color((int) (Math.random()*256));
   }
-  if (key == 's') {
-    s.accelerate(-accelerationF);
-  }
-  if (key == 'a') {
-    s.setPointDirection((int) s.getPointDirection() - rotationF);
-    s.rotate(-rotationF);
-  }
-  if (key == 'd') {
-    s.setPointDirection((int) s.getPointDirection() + rotationF);
-    s.rotate(rotationF);
-  }
-  if (keyCode == CONTROL) {
-    double reducF = 0.5;
-    if ((Math.abs(s.getDirectionX()) <= 0.5)) { s.setDirectionX(0); }
-    if ((Math.abs(s.getDirectionY()) <= 0.5)) { s.setDirectionY(0); }
-    if (s.getDirectionX() > 0) { s.setDirectionX(s.myDirectionX - reducF); }
-    else if (s.getDirectionX() < 0) { s.setDirectionX(s.myDirectionX + reducF); }
-    if (s.getDirectionY() > 0) { s.setDirectionY(s.myDirectionY - reducF); }
-    else if (s.getDirectionY() < 0) { s.setDirectionY(s.myDirectionY + reducF); }
+  public void display() {
+    noStroke();
+    fill(myColor);
+    ellipse(myX, myY, myR, myR);
   }
 }
+// Spaceship controls
+public void keyPressed() {
+  double accelerationF = 0.4;
+  int rotationF = 8;  // rotation in degrees
+  // ship navigation
+  if (key == 'w' || key == 'W') s.accelerate(accelerationF);
+  if (key == 's' || key == 'A') s.accelerate(-accelerationF);
+  if (key == 'a' || key == 'S') s.rotate(-rotationF);
+  if (key == 'd' || key == 'D') s.rotate(rotationF);
+  // ship "brakes" for slowing down
+  if (keyCode == CONTROL) {
+    double reducF = 0.2;
+    if ((Math.abs(s.getDirectionX()) <= 0.5)) s.setDirectionX(0);
+    if ((Math.abs(s.getDirectionY()) <= 0.5)) s.setDirectionY(0);
+    if (s.getDirectionX() > 0) s.setDirectionX(s.myDirectionX - reducF);
+    else if (s.getDirectionX() < 0) s.setDirectionX(s.myDirectionX + reducF);
+    if (s.getDirectionY() > 0) s.setDirectionY(s.myDirectionY - reducF);
+    else if (s.getDirectionY() < 0) s.setDirectionY(s.myDirectionY + reducF);
+  }
+}
+// Draws the spaceship
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
   private final double MAX_SPEED;
@@ -54,13 +80,13 @@ class SpaceShip extends Floater {
       18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -14, 
       -14, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
     };
-     myYs = new int[] { 
+    myYs = new int[] { 
       2, 6, 10, 10, 6, 4, 4, 10, 10, 8, 6, 4, 4, 
       -4, -4, -6, -8, -10, -10, -4, -4, -6, -10, -10, -6, -2
     };
     xCorners = myXs;
     yCorners = myYs;
-    myColor = color(255);
+    myColor = color(255, 94, 0);
     myCenterX = width/2;
     myCenterY = height/2;
     myDirectionX = 0;
@@ -80,13 +106,21 @@ class SpaceShip extends Floater {
   public double getPointDirection() { return myPointDirection; }
   // Accelerates the floater in the direction it is pointing (myPointDirection)
   public void accelerate(double dAmount) {
+    int[] flameColors = { color(226, 88, 34), 
+                          color(255, 153, 0), 
+                          color(255, 165, 0), 
+                          color(255, 88, 0), 
+                          color(255, 209, 220) };
     // convert the current direction the floater is pointing to radians
     double dRadians = myPointDirection * (Math.PI/180);
     // change coordinates of direction of travel
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
+    fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
+    ellipse(myDirectionX, myDirectionY, 20, 20);
   }
 }
+// Abstract Floater class 
 abstract class Floater {  // Do NOT modify the Floater class! Make changes in the SpaceShip class
   protected int corners;  // the number of corners, a triangular floater has 3
   protected int[] xCorners;
@@ -123,16 +157,10 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
     myCenterX += myDirectionX;
     myCenterY += myDirectionY;
     // wrap around screen
-    if (myCenterX > width) {
-      myCenterX = 0;
-    } else if (myCenterX < 0) {     
-      myCenterX = width;
-    }
-    if (myCenterY > height) {    
-      myCenterY = 0;
-    } else if (myCenterY < 0) {     
-      myCenterY = height;
-    }
+    if (myCenterX > width) myCenterX = 0;
+    else if (myCenterX < 0) myCenterX = width;
+    if (myCenterY > height) myCenterY = 0;
+    else if (myCenterY < 0) myCenterY = height;
   }
   // Draws the floater at the current position
   public void show() {
