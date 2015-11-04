@@ -5,7 +5,6 @@
  */
 
 // TODO Engine fire
-// TODO Smooth out spaceship movement
 
 int bgColor = color(0);
 
@@ -16,6 +15,7 @@ Star[] stars;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
+  frameRate(30);
   smooth();
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
@@ -25,14 +25,18 @@ public void setup() {
 public void draw() {
   screenFade();
   for (int i = 0; i < stars.length; i++) stars[i].display();
+  keyActions();
   s.move();
   s.show();
+  strokeWeight(10);
+  stroke(255);
+  point((float) s.getDirectionX()+s.getX(), (float) s.getDirectionY()+s.getY());
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
   noStroke();
   fill(bgColor, 150);
-  rect(0, 0, width-1, height-1);
+  rect(0, 0, width, height);
 }
 // Draws monochromatic stars
 class Star {
@@ -41,7 +45,7 @@ class Star {
   public Star() {
     myX = (float) Math.random()*width;
     myY = (float) Math.random()*height;
-    myR = (float) Math.random()*51 + 5;
+    myR = (float) Math.random()*31 + 5;
     myColor = color((int) (Math.random()*256));
   }
   public void display() {
@@ -50,17 +54,32 @@ class Star {
     ellipse(myX, myY, myR, myR);
   }
 }
-// Spaceship controls
+// Detect Spaceship controls
+boolean wPressed = false;
+boolean sPressed = false;
+boolean aPressed = false;
+boolean dPressed = false;
+boolean ctrlPressed = false;
 public void keyPressed() {
-  double accelerationF = 0.4;
-  int rotationF = 8;  // rotation in degrees
+  // detect ship navigation presses
+  if (key == 'w' || key == 'W') wPressed = true;
+  if (key == 's' || key == 'A') sPressed = true;
+  if (key == 'a' || key == 'S') aPressed = true;
+  if (key == 'd' || key == 'D') dPressed = true;
+  // detect ship "brakes" presses
+  if (keyCode == CONTROL) ctrlPressed = true;
+}
+// Respond to key presses
+public void keyActions() {
+  double accelerationF = 0.3;
+  int rotationF = 5;  // rotation in degrees
   // ship navigation
-  if (key == 'w' || key == 'W') s.accelerate(accelerationF);
-  if (key == 's' || key == 'A') s.accelerate(-accelerationF);
-  if (key == 'a' || key == 'S') s.rotate(-rotationF);
-  if (key == 'd' || key == 'D') s.rotate(rotationF);
+  if (wPressed) s.accelerate(accelerationF);
+  if (sPressed) s.accelerate(-accelerationF);
+  if (aPressed) s.rotate(-rotationF);
+  if (dPressed) s.rotate(rotationF);
   // ship "brakes" for slowing down
-  if (keyCode == CONTROL) {
+  if (ctrlPressed) {
     double reducF = 0.2;
     if ((Math.abs(s.getDirectionX()) <= 0.5)) s.setDirectionX(0);
     if ((Math.abs(s.getDirectionY()) <= 0.5)) s.setDirectionY(0);
@@ -69,6 +88,16 @@ public void keyPressed() {
     if (s.getDirectionY() > 0) s.setDirectionY(s.myDirectionY - reducF);
     else if (s.getDirectionY() < 0) s.setDirectionY(s.myDirectionY + reducF);
   }
+}
+// For multiple key presses
+public void keyReleased() {
+  // detect ship navigation releases
+  if (key == 'w' || key == 'W') wPressed = false;
+  if (key == 's' || key == 'A') sPressed = false;
+  if (key == 'a' || key == 'S') aPressed = false;
+  if (key == 'd' || key == 'D') dPressed = false;
+  // detect ship "brakes" re;eases
+  if (keyCode == CONTROL) ctrlPressed = false;
 }
 // Draws the spaceship
 class SpaceShip extends Floater {
@@ -94,30 +123,68 @@ class SpaceShip extends Floater {
     myPointDirection = 0;
     MAX_SPEED = 10;
   }
-  public void setX(int tempX) { myCenterX = tempX; }
-  public int getX() { return 0; }
-  public void setY(int tempY) { myCenterY = tempY; }
-  public int getY() { return 0; }
-  public void setDirectionX(double tempX) { myDirectionX = tempX; }
-  public double getDirectionX() { return myDirectionX; }
-  public void setDirectionY(double tempY) { myDirectionY = tempY; }
-  public double getDirectionY() { return myDirectionY; }
-  public void setPointDirection(int tempDegrees) { myPointDirection = tempDegrees; }
-  public double getPointDirection() { return myPointDirection; }
+  public void setX(int tempX) { 
+    myCenterX = tempX;
+  }
+  public int getX() { 
+    return (int) myCenterX;
+  }
+  public void setY(int tempY) { 
+    myCenterY = tempY;
+  }
+  public int getY() { 
+    return (int) myCenterX;
+  }
+  public void setDirectionX(double tempX) { 
+    myDirectionX = tempX;
+  }
+  public double getDirectionX() { 
+    return myDirectionX;
+  }
+  public void setDirectionY(double tempY) { 
+    myDirectionY = tempY;
+  }
+  public double getDirectionY() { 
+    return myDirectionY;
+  }
+  public void setPointDirection(int tempDegrees) { 
+    myPointDirection = tempDegrees;
+  }
+  public double getPointDirection() { 
+    return myPointDirection;
+  }
   // Accelerates the floater in the direction it is pointing (myPointDirection)
   public void accelerate(double dAmount) {
-    int[] flameColors = { color(226, 88, 34), 
-                          color(255, 153, 0), 
-                          color(255, 165, 0), 
-                          color(255, 88, 0), 
-                          color(255, 209, 220) };
+    int[] flameColors = { 
+      color(226, 88, 34), 
+      color(255, 153, 0), 
+      color(255, 165, 0), 
+      color(255, 88, 0), 
+      color(255, 209, 220)
+    };
     // convert the current direction the floater is pointing to radians
     double dRadians = myPointDirection * (Math.PI/180);
     // change coordinates of direction of travel
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
     fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
-    ellipse(myDirectionX, myDirectionY, 20, 20);
+    ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
+  }
+  // Draws the floater at the current position
+  public void show() {
+    noStroke();
+    fill(myColor);
+    //convert degrees to radians for sin and cos
+    double dRadians = myPointDirection*(Math.PI/180);
+    int xRotatedTranslated, yRotatedTranslated;
+    beginShape();
+    for (int nI = 0; nI < corners; nI++) {
+      // rotate and translate the coordinates of the floater using current direction
+      xRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);
+      yRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY);
+      vertex(xRotatedTranslated, yRotatedTranslated);
+    }
+    endShape(CLOSE);
   }
 }
 // Abstract Floater class 
