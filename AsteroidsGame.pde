@@ -15,7 +15,6 @@ Star[] stars;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
-  frameRate(30);
   smooth();
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
@@ -28,9 +27,6 @@ public void draw() {
   keyActions();
   s.move();
   s.show();
-  strokeWeight(10);
-  stroke(255);
-  point((float) s.getDirectionX()+s.getX(), (float) s.getDirectionY()+s.getY());
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -38,7 +34,7 @@ public void screenFade() {
   fill(bgColor, 150);
   rect(0, 0, width, height);
 }
-// Draws monochromatic stars
+// Draw monochromatic stars
 class Star {
   private float myX, myY, myR;
   private int myColor;
@@ -59,6 +55,7 @@ boolean wPressed = false;
 boolean sPressed = false;
 boolean aPressed = false;
 boolean dPressed = false;
+boolean fPressed = false;
 boolean ctrlPressed = false;
 public void keyPressed() {
   // detect ship navigation presses
@@ -66,21 +63,25 @@ public void keyPressed() {
   if (key == 's' || key == 'A') sPressed = true;
   if (key == 'a' || key == 'S') aPressed = true;
   if (key == 'd' || key == 'D') dPressed = true;
+  // hyperspace initiated
+  if (key == 'f' || key == 'F') fPressed = true;
   // detect ship "brakes" presses
   if (keyCode == CONTROL) ctrlPressed = true;
 }
 // Respond to key presses
 public void keyActions() {
-  double accelerationF = 0.3;
+  double accelerationF = 0.2;
   int rotationF = 5;  // rotation in degrees
   // ship navigation
   if (wPressed) s.accelerate(accelerationF);
   if (sPressed) s.accelerate(-accelerationF);
   if (aPressed) s.rotate(-rotationF);
   if (dPressed) s.rotate(rotationF);
+  // hyperspace to new postition
+  if (fPressed) s.hyperspace();
   // ship "brakes" for slowing down
   if (ctrlPressed) {
-    double reducF = 0.2;
+    double reducF = 0.05;
     if ((Math.abs(s.getDirectionX()) <= 0.5)) s.setDirectionX(0);
     if ((Math.abs(s.getDirectionY()) <= 0.5)) s.setDirectionY(0);
     if (s.getDirectionX() > 0) s.setDirectionX(s.myDirectionX - reducF);
@@ -96,7 +97,9 @@ public void keyReleased() {
   if (key == 's' || key == 'A') sPressed = false;
   if (key == 'a' || key == 'S') aPressed = false;
   if (key == 'd' || key == 'D') dPressed = false;
-  // detect ship "brakes" re;eases
+  // hyperspace releases
+  if (key == 'f' || key == 'F') fPressed = false;
+  // detect ship "brakes" releases
   if (keyCode == CONTROL) ctrlPressed = false;
 }
 // Draws the spaceship
@@ -133,7 +136,7 @@ class SpaceShip extends Floater {
     myCenterY = tempY;
   }
   public int getY() { 
-    return (int) myCenterX;
+    return (int) myCenterY;
   }
   public void setDirectionX(double tempX) { 
     myDirectionX = tempX;
@@ -155,6 +158,15 @@ class SpaceShip extends Floater {
   }
   // Accelerates the floater in the direction it is pointing (myPointDirection)
   public void accelerate(double dAmount) {
+    // convert the current direction the floater is pointing to radians
+    double dRadians = myPointDirection * (Math.PI/180);
+    // change coordinates of direction of travel
+    myDirectionX += ((dAmount) * Math.cos(dRadians));
+    myDirectionY += ((dAmount) * Math.sin(dRadians));
+    //enginePropulsion();
+  }
+  // TODO Draw engine flames
+  private void enginePropulsion() {
     int[] flameColors = { 
       color(226, 88, 34), 
       color(255, 153, 0), 
@@ -162,15 +174,19 @@ class SpaceShip extends Floater {
       color(255, 88, 0), 
       color(255, 209, 220)
     };
-    // convert the current direction the floater is pointing to radians
-    double dRadians = myPointDirection * (Math.PI/180);
-    // change coordinates of direction of travel
-    myDirectionX += ((dAmount) * Math.cos(dRadians));
-    myDirectionY += ((dAmount) * Math.sin(dRadians));
-    fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
-    ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
+    strokeWeight(10);
+    stroke(flameColors[(int) (Math.random()*flameColors.length)]);
+    point((float) (s.getX()-s.getDirectionX()), (float) (s.getY()-s.getDirectionY()));
+    // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
+    // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
   }
-  // Draws the floater at the current position
+  // Hyperspace to new position facing random direction
+  public void hyperspace() {
+    myCenterX = Math.random()*width;
+    myCenterY = Math.random()*height;
+    myPointDirection = Math.random()*360;
+  }
+  // Draw the spaceship at the current position (myCenterX, myCenterY)
   public void show() {
     noStroke();
     fill(myColor);
