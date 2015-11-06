@@ -56,6 +56,7 @@ boolean sPressed = false;
 boolean aPressed = false;
 boolean dPressed = false;
 boolean fPressed = false;
+boolean hyperActive = false;
 boolean ctrlPressed = false;
 public void keyPressed() {
   // detect ship navigation presses
@@ -64,9 +65,20 @@ public void keyPressed() {
   if (key == 'a' || key == 'S') aPressed = true;
   if (key == 'd' || key == 'D') dPressed = true;
   // hyperspace initiated
-  if (key == 'f' || key == 'F') fPressed = true;
+  if ((key == 'f' || key == 'F') && !hyperActive) {
+    hyperActive = true;
+    hyperspace();
+  }
   // detect ship "brakes" presses
   if (keyCode == CONTROL) ctrlPressed = true;
+}
+// Hyperspace to new position facing random direction
+public void hyperspace() {
+  s.setX((int) (Math.random()*width));
+  s.setY((int) (Math.random()*height));
+  s.setPointDirection((int) (Math.random()*360));
+  s.setDirectionX(0);
+  s.setDirectionY(0);
 }
 // Respond to key presses
 public void keyActions() {
@@ -77,8 +89,6 @@ public void keyActions() {
   if (sPressed) s.accelerate(-accelerationF);
   if (aPressed) s.rotate(-rotationF);
   if (dPressed) s.rotate(rotationF);
-  // hyperspace to new postition
-  if (fPressed) s.hyperspace();
   // ship "brakes" for slowing down
   if (ctrlPressed) {
     double reducF = 0.05;
@@ -97,8 +107,9 @@ public void keyReleased() {
   if (key == 's' || key == 'A') sPressed = false;
   if (key == 'a' || key == 'S') aPressed = false;
   if (key == 'd' || key == 'D') dPressed = false;
-  // hyperspace releases
-  if (key == 'f' || key == 'F') fPressed = false;
+  if (key == 'f' || key == 'F') {
+    hyperActive = false;
+  }
   // detect ship "brakes" releases
   if (keyCode == CONTROL) ctrlPressed = false;
 }
@@ -180,11 +191,12 @@ class SpaceShip extends Floater {
     // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
     // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
   }
-  // Hyperspace to new position facing random direction
   public void hyperspace() {
-    myCenterX = Math.random()*width;
-    myCenterY = Math.random()*height;
-    myPointDirection = Math.random()*360;
+    myCenterX = (int) (Math.random()*width);
+    myCenterX = (int) (Math.random()*height);
+    myPointDirection = (int) (Math.random()*360);
+    myDirectionX = 0;
+    myDirectionY = 0;
   }
   // Draw the spaceship at the current position (myCenterX, myCenterY)
   public void show() {
