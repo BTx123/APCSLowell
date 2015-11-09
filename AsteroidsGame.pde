@@ -5,12 +5,14 @@
  */
 
 // TODO Engine fire
+// TODO Combine all into one Floater class declaration
 
 int bgColor = color(0);
 
 // Declarations
-Floater s;
 Star[] stars;
+Floater ship;
+Asteroid[] asteroids;
 
 // Initialize stars and spaceship
 public void setup() {
@@ -18,15 +20,19 @@ public void setup() {
   smooth();
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
-  s = new SpaceShip();
+  ship = new SpaceShip();
+  asteroids = new Asteroid[10];
+  for (int i = 0; i < asteroids.length; i++) asteroids[i] = new Asteroid();
 }
 // Display the game
 public void draw() {
   screenFade();
   for (int i = 0; i < stars.length; i++) stars[i].display();
   keyActions();
-  s.move();
-  s.show();
+  ship.move();
+  ship.show();
+  for (int i = 0; i < asteroids.length; i++) asteroids[i].move();
+  for (int i = 0; i < asteroids.length; i++) asteroids[i].show();
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -74,30 +80,30 @@ public void keyPressed() {
 }
 // Hyperspace to new position facing random direction
 public void hyperspace() {
-  s.setX((int) (Math.random()*width));
-  s.setY((int) (Math.random()*height));
-  s.setPointDirection((int) (Math.random()*360));
-  s.setDirectionX(0);
-  s.setDirectionY(0);
+  ship.setX((int) (Math.random()*width));
+  ship.setY((int) (Math.random()*height));
+  ship.setPointDirection((int) (Math.random()*360));
+  ship.setDirectionX(0);
+  ship.setDirectionY(0);
 }
 // Respond to key presses
 public void keyActions() {
   double accelerationF = 0.2;
   int rotationF = 5;  // rotation in degrees
   // ship navigation
-  if (wPressed) s.accelerate(accelerationF);
-  if (sPressed) s.accelerate(-accelerationF);
-  if (aPressed) s.rotate(-rotationF);
-  if (dPressed) s.rotate(rotationF);
+  if (wPressed) ship.accelerate(accelerationF);
+  if (sPressed) ship.accelerate(-accelerationF);
+  if (aPressed) ship.rotate(-rotationF);
+  if (dPressed) ship.rotate(rotationF);
   // ship "brakes" for slowing down
   if (ctrlPressed) {
     double reducF = 0.05;
-    if ((Math.abs(s.getDirectionX()) <= 0.5)) s.setDirectionX(0);
-    if ((Math.abs(s.getDirectionY()) <= 0.5)) s.setDirectionY(0);
-    if (s.getDirectionX() > 0) s.setDirectionX(s.myDirectionX - reducF);
-    else if (s.getDirectionX() < 0) s.setDirectionX(s.myDirectionX + reducF);
-    if (s.getDirectionY() > 0) s.setDirectionY(s.myDirectionY - reducF);
-    else if (s.getDirectionY() < 0) s.setDirectionY(s.myDirectionY + reducF);
+    if ((Math.abs(ship.getDirectionX()) <= 0.5)) ship.setDirectionX(0);
+    if ((Math.abs(ship.getDirectionY()) <= 0.5)) ship.setDirectionY(0);
+    if (ship.getDirectionX() > 0) ship.setDirectionX(ship.myDirectionX - reducF);
+    else if (ship.getDirectionX() < 0) ship.setDirectionX(ship.myDirectionX + reducF);
+    if (ship.getDirectionY() > 0) ship.setDirectionY(ship.myDirectionY - reducF);
+    else if (ship.getDirectionY() < 0) ship.setDirectionY(ship.myDirectionY + reducF);
   }
 }
 // For multiple key presses
@@ -116,16 +122,15 @@ public void keyReleased() {
 // Draws the spaceship
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
-  private final double MAX_SPEED;
   SpaceShip() {
     corners = 26;
     myXs = new int[] { 
-      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -14, 
-      -14, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
+      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
+      -10, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
     };
     myYs = new int[] { 
-      2, 6, 10, 10, 6, 4, 4, 10, 10, 8, 6, 4, 4, 
-      -4, -4, -6, -8, -10, -10, -4, -4, -6, -10, -10, -6, -2
+      2, 6, 10, 10, 16, 4, 4, 10, 10, 8, 6, 4, 4, 
+      -4, -4, -6, -8, -10, -10, -4, -4, -16, -10, -10, -6, -2
     };
     xCorners = myXs;
     yCorners = myYs;
@@ -135,7 +140,6 @@ class SpaceShip extends Floater {
     myDirectionX = 0;
     myDirectionY = 0;
     myPointDirection = 0;
-    MAX_SPEED = 10;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -187,7 +191,7 @@ class SpaceShip extends Floater {
     };
     strokeWeight(10);
     stroke(flameColors[(int) (Math.random()*flameColors.length)]);
-    point((float) (s.getX()-s.getDirectionX()), (float) (s.getY()-s.getDirectionY()));
+    point((float) (ship.getX()-ship.getDirectionX()), (float) (ship.getY()-ship.getDirectionY()));
     // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
     // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
   }
@@ -213,6 +217,57 @@ class SpaceShip extends Floater {
       vertex(xRotatedTranslated, yRotatedTranslated);
     }
     endShape(CLOSE);
+  }
+}
+class Asteroid extends Floater {
+  private int rotateValue;
+  public Asteroid() {
+    corners = 10;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    for (int i = 0; i < xCorners.length; i++) xCorners[i] = (int) (Math.random()*62) - 20;
+    for (int i = 0; i < yCorners.length; i++) yCorners[i] = (int) (Math.random()*62) - 20;
+    rotateValue = (int) (Math.random()*10) + 5;
+    myColor = color(255, 94, 0);
+    myCenterX = Math.random()*width;
+    myCenterY = Math.random()*height;
+    myDirectionX = map((float) Math.random()*width, 0, height, 0, 1);
+    myDirectionY = map((float) Math.random()*height, 0, height, 0, 1);
+    myPointDirection = 0;
+  }
+  public void setX(int tempX) { 
+    myCenterX = tempX;
+  }
+  public int getX() { 
+    return (int) myCenterX;
+  }
+  public void setY(int tempY) { 
+    myCenterY = tempY;
+  }
+  public int getY() { 
+    return (int) myCenterY;
+  }
+  public void setDirectionX(double tempX) { 
+    myDirectionX = tempX;
+  }
+  public double getDirectionX() { 
+    return myDirectionX;
+  }
+  public void setDirectionY(double tempY) { 
+    myDirectionY = tempY;
+  }
+  public double getDirectionY() { 
+    return myDirectionY;
+  }
+  public void setPointDirection(int tempDegrees) { 
+    myPointDirection = tempDegrees;
+  }
+  public double getPointDirection() { 
+    return myPointDirection;
+  }
+  public void move() {
+    rotate(rotateValue);  // rotate by individually specified amount
+    super.move();         // move according to Floater defined move() method
   }
 }
 // Abstract Floater class 
