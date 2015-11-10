@@ -6,6 +6,7 @@
 
 // TODO Engine fire
 // TODO Combine all into one Floater class declaration
+// TODO Asteroids
 
 int bgColor = color(0);
 
@@ -223,16 +224,14 @@ class Asteroid extends Floater {
   private int rotateValue;
   public Asteroid() {
     corners = 10;
-    xCorners = new int[corners];
-    yCorners = new int[corners];
-    for (int i = 0; i < xCorners.length; i++) xCorners[i] = (int) (Math.random()*62) - 20;
-    for (int i = 0; i < yCorners.length; i++) yCorners[i] = (int) (Math.random()*62) - 20;
-    rotateValue = (int) (Math.random()*10) + 5;
-    myColor = color(255, 94, 0);
+    xCorners = randomCorners(corners);
+    yCorners = randomCorners(corners);
+    rotateValue = (int) (Math.random()*10) + 1;
+    myColor = color(127, 127, 127, 100);
     myCenterX = Math.random()*width;
     myCenterY = Math.random()*height;
-    myDirectionX = map((float) Math.random()*width, 0, height, 0, 1);
-    myDirectionY = map((float) Math.random()*height, 0, height, 0, 1);
+    myDirectionX = Math.random()*6 - 2;
+    myDirectionY = Math.random()*6 - 2;
     myPointDirection = 0;
   }
   public void setX(int tempX) { 
@@ -268,6 +267,15 @@ class Asteroid extends Floater {
   public void move() {
     rotate(rotateValue);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
+  }
+  private int[] randomCorners(int num) {
+    int[] nums = new int[num];
+    for (int i = 0; i < nums.length; i++) {
+      int test = (int) (Math.random()*2);
+      if (test == 0) nums[i] = (int) (Math.random()*51);  // positive
+      if (test == 1) nums[i] = (int) (Math.random()*51) - 50;  // negative
+    }
+    return nums;
   }
 }
 // Abstract Floater class 
