@@ -220,6 +220,7 @@ class SpaceShip extends Floater {
     endShape(CLOSE);
   }
 }
+// Asteroids
 class Asteroid extends Floater {
   private int rotateValue;
   public Asteroid() {
