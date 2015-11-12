@@ -220,15 +220,14 @@ class SpaceShip extends Floater {
     endShape(CLOSE);
   }
 }
-// Asteroids
 class Asteroid extends Floater {
   private int rotateValue;
   public Asteroid() {
     corners = 10;
-    xCorners = randomCorners(corners);
-    yCorners = randomCorners(corners);
+    xCorners = randomCorners('x', corners);
+    yCorners = randomCorners('y', corners);
     rotateValue = (int) (Math.random()*10) + 1;
-    myColor = color(127, 127, 127, 100);
+    myColor = color(127, 127, 127);
     myCenterX = Math.random()*width;
     myCenterY = Math.random()*height;
     myDirectionX = Math.random()*6 - 2;
@@ -269,12 +268,14 @@ class Asteroid extends Floater {
     rotate(rotateValue);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
-  private int[] randomCorners(int num) {
+  private int[] randomCorners(char var, int num) {
     int[] nums = new int[num];
+    float theta = 0;
     for (int i = 0; i < nums.length; i++) {
-      int test = (int) (Math.random()*2);
-      if (test == 0) nums[i] = (int) (Math.random()*51);  // positive
-      if (test == 1) nums[i] = (int) (Math.random()*51) - 50;  // negative
+      int radius = (int) (Math.random()*51) + 20;
+      if (var == 'x') nums[i] = (int) (Math.sin(theta)*radius);
+      if (var == 'y') nums[i] = (int) (Math.cos(theta)*radius);
+      theta += TWO_PI/num;
     }
     return nums;
   }
@@ -338,4 +339,3 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
     endShape(CLOSE);
   }
 }
-
