@@ -14,7 +14,10 @@ int bgColor = color(0);
 Star[] stars;
 Floater ship;
 Asteroid[] asteroids;
-
+//Floater[] objects = new FLoater[111];
+//objects[0] = new SpaceShip();
+//objects[1] = new Asteroid();
+//objects[2] = new Star();
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
@@ -63,7 +66,7 @@ boolean sPressed = false;
 boolean aPressed = false;
 boolean dPressed = false;
 boolean fPressed = false;
-boolean hyperActive = false;
+boolean hyperspaceActive = false;
 boolean ctrlPressed = false;
 public void keyPressed() {
   // detect ship navigation presses
@@ -72,8 +75,8 @@ public void keyPressed() {
   if (key == 'a' || key == 'S') aPressed = true;
   if (key == 'd' || key == 'D') dPressed = true;
   // hyperspace initiated
-  if ((key == 'f' || key == 'F') && !hyperActive) {
-    hyperActive = true;
+  if ((key == 'f' || key == 'F') && !hyperspaceActive) {
+    hyperspaceActive = true;
     hyperspace();
   }
   // detect ship "brakes" presses
@@ -115,7 +118,7 @@ public void keyReleased() {
   if (key == 'a' || key == 'S') aPressed = false;
   if (key == 'd' || key == 'D') dPressed = false;
   if (key == 'f' || key == 'F') {
-    hyperActive = false;
+    hyperspaceActive = false;
   }
   // detect ship "brakes" releases
   if (keyCode == CONTROL) ctrlPressed = false;
@@ -226,12 +229,13 @@ class Asteroid extends Floater {
     corners = 10;
     xCorners = randomCorners('x', corners);
     yCorners = randomCorners('y', corners);
-    rotateValue = (int) (Math.random()*10) + 1;
-    myColor = color(127, 127, 127);
+    rotateValue = (int) (Math.random()*5) + 1;
+    int grey = (int) (Math.random()*51) + 102;
+    myColor = color(grey, grey, grey, grey);
     myCenterX = Math.random()*width;
     myCenterY = Math.random()*height;
-    myDirectionX = Math.random()*6 - 2;
-    myDirectionY = Math.random()*6 - 2;
+    myDirectionX = Math.random()*6 - 3;
+    myDirectionY = Math.random()*6 - 3;
     myPointDirection = 0;
   }
   public void setX(int tempX) { 
