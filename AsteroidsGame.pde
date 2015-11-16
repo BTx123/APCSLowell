@@ -5,7 +5,7 @@
  */
 
 // TODO Engine fire
-// TODO Combine all into one Floater class declaration
+// ??TODO Combine all into one Floater class declaration
 // TODO Asteroids
 
 int bgColor = color(0);
@@ -14,10 +14,6 @@ int bgColor = color(0);
 Star[] stars;
 Floater ship;
 Asteroid[] asteroids;
-//Floater[] objects = new FLoater[111];
-//objects[0] = new SpaceShip();
-//objects[1] = new Asteroid();
-//objects[2] = new Star();
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
