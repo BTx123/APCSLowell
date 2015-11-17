@@ -5,8 +5,6 @@
  */
 
 // TODO Engine fire
-// ??TODO Combine all into one Floater class declaration
-// TODO Asteroids
 
 int bgColor = color(0);
 
