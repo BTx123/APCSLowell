@@ -218,7 +218,7 @@ class SpaceShip extends Floater {
   }
 }
 class Asteroid extends Floater {
-  private int rotateValue;
+  private int rotateSpeed;
   public Asteroid() {
     corners = 10;
     xCorners = randomCorners('x', corners);
