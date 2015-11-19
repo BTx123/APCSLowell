@@ -266,13 +266,13 @@ class Asteroid extends Floater {
     rotate(rotateValue);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
-  private int[] randomCorners(char var, int num) {
+  private int[] randomCorners(char pos, int num) {
     int[] nums = new int[num];
     float theta = 0;
     for (int i = 0; i < nums.length; i++) {
       int radius = (int) (Math.random()*51) + 20;
-      if (var == 'x') nums[i] = (int) (Math.sin(theta)*radius);
-      if (var == 'y') nums[i] = (int) (Math.cos(theta)*radius);
+      if (pos == 'x') nums[i] = (int) (Math.sin(theta)*radius);
+      if (pos == 'y') nums[i] = (int) (Math.cos(theta)*radius);
       theta += TWO_PI/num;
     }
     return nums;
