@@ -5,13 +5,15 @@
  */
 
 // TODO Engine fire
+// TODO Asteroid Destruction
 
 int bgColor = color(0);
 
 // Declarations
 Star[] stars;
 Floater ship;
-Asteroid[] asteroids;
+//Asteroid[] asteroids;
+ArrayList <Asteroid> asteroids;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
@@ -19,8 +21,8 @@ public void setup() {
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   ship = new SpaceShip();
-  asteroids = new Asteroid[10];
-  for (int i = 0; i < asteroids.length; i++) asteroids[i] = new Asteroid();
+  asteroids = new ArrayList(100);
+  for (int i = 0; i < asteroids.size(); i++) asteroids.add(new Asteroid());
 }
 // Display the game
 public void draw() {
@@ -29,8 +31,8 @@ public void draw() {
   keyActions();
   ship.move();
   ship.show();
-  for (int i = 0; i < asteroids.length; i++) asteroids[i].move();
-  for (int i = 0; i < asteroids.length; i++) asteroids[i].show();
+  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).move();
+  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).show();
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -121,14 +123,23 @@ public void keyReleased() {
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
   SpaceShip() {
-    corners = 26;
-    myXs = new int[] { 
-      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
-      -10, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
+//    corners = 26;
+//    myXs = new int[] { 
+//      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
+//      -10, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
+//    };
+//    myYs = new int[] { 
+//      2, 6, 10, 10, 16, 4, 4, 10, 10, 8, 6, 4, 4, 
+//      -4, -4, -6, -8, -10, -10, -4, -4, -16, -10, -10, -6, -2
+//    };    myXs = new int[] { 
+    corners = 17;
+    myXs = new int[] {
+      25, 0, -5, 0, -10, -10, -25, -20, -10, 
+      -20, -25, -10, -10, 0, -5, 0, 25
     };
     myYs = new int[] { 
-      2, 6, 10, 10, 16, 4, 4, 10, 10, 8, 6, 4, 4, 
-      -4, -4, -6, -8, -10, -10, -4, -4, -16, -10, -10, -6, -2
+      0, -10, -5, -20, -15, -10, -15, -5, 0,
+      5, 15, 10, 15, 20, 5, 10, 0
     };
     xCorners = myXs;
     yCorners = myYs;
@@ -223,7 +234,7 @@ class Asteroid extends Floater {
     corners = 10;
     xCorners = randomCorners('x', corners);
     yCorners = randomCorners('y', corners);
-    rotateValue = (int) (Math.random()*5) + 1;
+    rotateSpeed = (int) (Math.random()*5) + 1;
     int grey = (int) (Math.random()*51) + 102;
     myColor = color(grey, grey, grey, grey);
     myCenterX = Math.random()*width;
@@ -263,16 +274,16 @@ class Asteroid extends Floater {
     return myPointDirection;
   }
   public void move() {
-    rotate(rotateValue);  // rotate by individually specified amount
+    rotate(rotateSpeed);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
-  private int[] randomCorners(char pos, int num) {
+  private int[] randomCorners(char dim, int num) {
     int[] nums = new int[num];
     float theta = 0;
     for (int i = 0; i < nums.length; i++) {
       int radius = (int) (Math.random()*51) + 20;
-      if (pos == 'x') nums[i] = (int) (Math.sin(theta)*radius);
-      if (pos == 'y') nums[i] = (int) (Math.cos(theta)*radius);
+      if (dim == 'x') nums[i] = (int) (Math.sin(theta)*radius);
+      if (dim == 'y') nums[i] = (int) (Math.cos(theta)*radius);
       theta += TWO_PI/num;
     }
     return nums;
