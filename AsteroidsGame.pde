@@ -119,19 +119,16 @@ public void keyReleased() {
 }
 // Draws the spaceship
 class SpaceShip extends Floater {
-  private int[] myXs, myYs;
   public SpaceShip() {
-    corners = 26;
-    myXs = new int[] { 
-      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
-      -10, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
+    corners = 17;
+    xCorners = new int[] {
+      25, 0, -5, 0, -10, -10, -25, -20, -10, 
+      -20, -25, -10, -10, 0, -5, 0, 25
     };
-    myYs = new int[] { 
-      2, 6, 10, 10, 16, 4, 4, 10, 10, 8, 6, 4, 4, 
-      -4, -4, -6, -8, -10, -10, -4, -4, -16, -10, -10, -6, -2
+    yCorners = new int[] { 
+      0, -10, -5, -20, -15, -10, -15, -5, 0,
+      5, 15, 10, 15, 20, 5, 10, 0
     };
-    xCorners = myXs;
-    yCorners = myYs;
     myColor = color(255, 94, 0);
     myCenterX = width/2;
     myCenterY = height/2;
