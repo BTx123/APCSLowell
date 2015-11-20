@@ -6,6 +6,7 @@
 
 // TODO Engine fire
 // TODO Asteroid Destruction
+// TODO Asteroid arraylist
 
 int bgColor = color(0);
 
@@ -13,7 +14,7 @@ int bgColor = color(0);
 Star[] stars;
 Floater ship;
 //Asteroid[] asteroids;
-ArrayList <Asteroid> asteroids;
+ArrayList<Asteroid> asteroids;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
@@ -21,7 +22,7 @@ public void setup() {
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   ship = new SpaceShip();
-  asteroids = new ArrayList(100);
+  asteroids = new ArrayList<Asteroid>(10);
   for (int i = 0; i < asteroids.size(); i++) asteroids.add(new Asteroid());
 }
 // Display the game
@@ -31,8 +32,12 @@ public void draw() {
   keyActions();
   ship.move();
   ship.show();
-  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).move();
-  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).show();
+  //for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).move();
+  //for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).show();
+  for (Asteroid a: asteroids) {
+    a.move();
+    a.show();
+  }
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
