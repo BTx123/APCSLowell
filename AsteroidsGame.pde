@@ -120,7 +120,7 @@ public void keyReleased() {
 // Draws the spaceship
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
-  SpaceShip() {
+  public SpaceShip() {
     corners = 26;
     myXs = new int[] { 
       18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
@@ -223,7 +223,7 @@ class Asteroid extends Floater {
     corners = 10;
     xCorners = randomCorners('x', corners);
     yCorners = randomCorners('y', corners);
-    rotateValue = (int) (Math.random()*5) + 1;
+    rotateSpeed = (int) (Math.random()*5) + 1;
     int grey = (int) (Math.random()*51) + 102;
     myColor = color(grey, grey, grey, grey);
     myCenterX = Math.random()*width;
@@ -263,7 +263,7 @@ class Asteroid extends Floater {
     return myPointDirection;
   }
   public void move() {
-    rotate(rotateValue);  // rotate by individually specified amount
+    rotate(rotateSpeed);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
   private int[] randomCorners(char pos, int num) {
