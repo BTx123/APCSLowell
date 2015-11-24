@@ -32,8 +32,9 @@ public void draw() {
   keyActions();
   ship.move();
   ship.show();
-  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).move();
-  for (int i = 0; i < asteroids.size(); i++) asteroids.get(i).show();
+  destroyAsteroids();
+  for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).move();
+  for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).show();
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -120,26 +121,25 @@ public void keyReleased() {
   // detect ship "brakes" releases
   if (keyCode == CONTROL) ctrlPressed = false;
 }
+// Destroy asteroids
+public void destroyAsteroids() {
+  for (int i = 0; i < asteroids.size (); i++) {
+    if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) {
+      asteroids.remove(i);
+    }
+  }
+}
 // Draws the spaceship
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
   SpaceShip() {
-//    corners = 26;
-//    myXs = new int[] { 
-//      18, 16, 12, 8, 4, 4, -2, -10, -16, -18, -18, -16, -10, 
-//      -10, -16, -18, -18, -16, -10, -2, 4, 4, 8, 12, 16, 18
-//    };
-//    myYs = new int[] { 
-//      2, 6, 10, 10, 16, 4, 4, 10, 10, 8, 6, 4, 4, 
-//      -4, -4, -6, -8, -10, -10, -4, -4, -16, -10, -10, -6, -2
-//    };    myXs = new int[] { 
     corners = 17;
     myXs = new int[] {
       25, 0, -5, 0, -10, -10, -25, -20, -10, 
       -20, -25, -10, -10, 0, -5, 0, 25
     };
     myYs = new int[] { 
-      0, -10, -5, -20, -15, -10, -15, -5, 0,
+      0, -10, -5, -20, -15, -10, -15, -5, 0, 
       5, 15, 10, 15, 20, 5, 10, 0
     };
     xCorners = myXs;
@@ -235,7 +235,7 @@ class Asteroid extends Floater {
     corners = 10;
     xCorners = randomCorners('x', corners);
     yCorners = randomCorners('y', corners);
-    rotateSpeed = (int) (Math.random()*5) + 1;
+    rotateSpeed = (int) (Math.random()*11) - 5;
     int grey = (int) (Math.random()*51) + 102;
     myColor = color(grey, grey, grey, grey);
     myCenterX = Math.random()*width;
@@ -278,11 +278,16 @@ class Asteroid extends Floater {
     rotate(rotateSpeed);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
+  // Return distance from this asteroid to SpaceShip s
+  public float distToShip(SpaceShip s) {
+    return dist(s.getX(), s.getY(), getX(), getY());
+  }
+  // Create random corners for the asteroid in a circular method
   private int[] randomCorners(char dim, int num) {
     int[] nums = new int[num];
     float theta = 0;
     for (int i = 0; i < nums.length; i++) {
-      int radius = (int) (Math.random()*51) + 20;
+      int radius = (int) (Math.random()*51) + 20;  // mean of 50
       if (dim == 'x') nums[i] = (int) (Math.sin(theta)*radius);
       if (dim == 'y') nums[i] = (int) (Math.cos(theta)*radius);
       theta += TWO_PI/num;
@@ -349,3 +354,4 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
     endShape(CLOSE);
   }
 }
+
