@@ -5,8 +5,6 @@
  */
 
 // TODO Engine fire
-// TODO Asteroid Destruction
-// TODO Asteroid arraylist
 
 int bgColor = color(0);
 
