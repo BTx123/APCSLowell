@@ -11,8 +11,8 @@ int bgColor = color(0);
 // Declarations
 Star[] stars;
 Floater ship;
-//Asteroid[] asteroids;
 ArrayList<Asteroid> asteroids;
+Bullet b;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
@@ -22,6 +22,7 @@ public void setup() {
   ship = new SpaceShip();
   asteroids = new ArrayList<Asteroid>();
   for (int i = 0; i < 10; i++) asteroids.add(new Asteroid());
+  b = new Bullet((SpaceShip) ship);
 }
 // Display the game
 public void draw() {
@@ -30,6 +31,7 @@ public void draw() {
   keyActions();
   ship.move();
   ship.show();
+  b.show();
   destroyAsteroids();
   for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).move();
   for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).show();
@@ -291,6 +293,51 @@ class Asteroid extends Floater {
       theta += TWO_PI/num;
     }
     return nums;
+  }
+}
+class Bullet extends Floater {
+  public Bullet (SpaceShip ship) {
+    myCenterX = ship.getX();
+    myCenterY = ship.getY();
+    myPointDirection = ship.getPointDirection();
+    double dRadians = myPointDirection*(Math.PI/180);
+    myDirectionX = 5 * Math.sin(dRadians) + ship.getDirectionX();
+    myDirectionY = 5 * Math.cos(dRadians) + ship.getDirectionY();
+  }
+  public void setX(int tempX) { 
+    myCenterX = tempX;
+  }
+  public int getX() { 
+    return (int) myCenterX;
+  }
+  public void setY(int tempY) { 
+    myCenterY = tempY;
+  }
+  public int getY() { 
+    return (int) myCenterY;
+  }
+  public void setDirectionX(double tempX) { 
+    myDirectionX = tempX;
+  }
+  public double getDirectionX() { 
+    return myDirectionX;
+  }
+  public void setDirectionY(double tempY) { 
+    myDirectionY = tempY;
+  }
+  public double getDirectionY() { 
+    return myDirectionY;
+  }
+  public void setPointDirection(int tempDegrees) { 
+    myPointDirection = tempDegrees;
+  }
+  public double getPointDirection() { 
+    return myPointDirection;
+  }
+  public void show() {
+    noStroke();
+    fill(255, 255, 0);
+    ellipse((float) myCenterX, (float) myCenterY, 10, 10);
   }
 }
 // Abstract Floater class 
