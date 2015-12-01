@@ -12,7 +12,7 @@ int bgColor = color(0);
 Star[] stars;
 Floater ship;
 ArrayList<Asteroid> asteroids;
-Bullet b;
+ArrayList<Bullet> bullets;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
@@ -22,19 +22,24 @@ public void setup() {
   ship = new SpaceShip();
   asteroids = new ArrayList<Asteroid>();
   for (int i = 0; i < 10; i++) asteroids.add(new Asteroid());
-  b = new Bullet((SpaceShip) ship);
+  bullets = new ArrayList<Bullet>();
 }
 // Display the game
 public void draw() {
   screenFade();
   for (int i = 0; i < stars.length; i++) stars[i].display();
   keyActions();
+  destroyAsteroids();
+  for (Asteroid a : asteroids) {
+    a.move();
+    a.show();
+  }
+  for (Bullet b : bullets) {
+    b.move();
+    b.show();
+  }
   ship.move();
   ship.show();
-  b.show();
-  destroyAsteroids();
-  for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).move();
-  for (int i = 0; i < asteroids.size (); i++) asteroids.get(i).show();
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -63,7 +68,7 @@ boolean wPressed = false;
 boolean sPressed = false;
 boolean aPressed = false;
 boolean dPressed = false;
-boolean fPressed = false;
+boolean weaponFiring = false;
 boolean hyperspaceActive = false;
 boolean ctrlPressed = false;
 public void keyPressed() {
@@ -72,6 +77,11 @@ public void keyPressed() {
   if (key == 's' || key == 'A') sPressed = true;
   if (key == 'a' || key == 'S') aPressed = true;
   if (key == 'd' || key == 'D') dPressed = true;
+  // fire weapon, spawning new bullet
+  if (key == ' ' && !weaponFiring) {
+    weaponFiring = true;
+    bullets.add(new Bullet((SpaceShip) ship));
+  }
   // hyperspace initiated
   if ((key == 'f' || key == 'F') && !hyperspaceActive) {
     hyperspaceActive = true;
@@ -115,10 +125,11 @@ public void keyReleased() {
   if (key == 's' || key == 'A') sPressed = false;
   if (key == 'a' || key == 'S') aPressed = false;
   if (key == 'd' || key == 'D') dPressed = false;
-  if (key == 'f' || key == 'F') {
-    hyperspaceActive = false;
-  }
-  // detect ship "brakes" releases
+  // detect weapon fire release
+  if (key == ' ') weaponFiring = false;
+  // detect hyperspace release
+  if (key == 'f' || key == 'F') hyperspaceActive = false;
+  // detect ship "brakes" release
   if (keyCode == CONTROL) ctrlPressed = false;
 }
 // Destroy asteroids
@@ -301,8 +312,8 @@ class Bullet extends Floater {
     myCenterY = ship.getY();
     myPointDirection = ship.getPointDirection();
     double dRadians = myPointDirection*(Math.PI/180);
-    myDirectionX = 5 * Math.sin(dRadians) + ship.getDirectionX();
-    myDirectionY = 5 * Math.cos(dRadians) + ship.getDirectionY();
+    myDirectionX = 5 * Math.cos(dRadians) + ship.getDirectionX();
+    myDirectionY = 5 * Math.sin(dRadians) + ship.getDirectionY();
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
