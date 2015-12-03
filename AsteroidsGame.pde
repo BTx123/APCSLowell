@@ -44,7 +44,7 @@ public void draw() {
 // Fade the screen slightly to create motion blur
 public void screenFade() {
   noStroke();
-  fill(bgColor, 150);
+  fill(bgColor, 125);
   rect(0, 0, width, height);
 }
 // Draw monochromatic stars
@@ -344,6 +344,11 @@ class Bullet extends Floater {
   }
   public double getPointDirection() { 
     return myPointDirection;
+  }
+  public void move() {  
+    // change the x and y coordinates by myDirectionX and myDirectionY
+    myCenterX += myDirectionX;
+    myCenterY += myDirectionY;
   }
   public void show() {
     noStroke();
