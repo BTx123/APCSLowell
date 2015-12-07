@@ -5,6 +5,7 @@
  */
 
 // TODO Engine fire
+// TODO Fix bullet acceleration
 
 int bgColor = color(0);
 
@@ -134,9 +135,14 @@ public void keyReleased() {
 }
 // Destroy asteroids
 public void destroyAsteroids() {
-  for (int i = 0; i < asteroids.size (); i++) {
-    if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) {
-      asteroids.remove(i);
+  if (asteroids.size () > 0) {
+    for (int i = 0; i < asteroids.size (); i++) {
+      if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) asteroids.remove(i);
+    }
+    for (int i = 1; i < asteroids.size ()+1; i++) {
+      for (Bullet b : bullets) {
+        if (asteroids.get(i-1).distToBullet(b) < 50) asteroids.remove(i-1);
+      }
     }
   }
 }
@@ -289,10 +295,6 @@ class Asteroid extends Floater {
     rotate(rotateSpeed);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
-  // Return distance from this asteroid to SpaceShip s
-  public float distToShip(SpaceShip s) {
-    return dist(s.getX(), s.getY(), getX(), getY());
-  }
   // Create random corners for the asteroid in a circular method
   private int[] randomCorners(char dim, int num) {
     int[] nums = new int[num];
@@ -304,6 +306,14 @@ class Asteroid extends Floater {
       theta += TWO_PI/num;
     }
     return nums;
+  }
+  // Return distance from this asteroid to SpaceShip s
+  private float distToShip(SpaceShip s) {
+    return dist(getX(), getY(), s.getX(), s.getY());
+  }
+  // Return distance from this asteroid to a Bullet b
+  private float distToBullet(Bullet b) {
+    return dist(getX(), getY(), b.getX(), b.getY());
   }
 }
 class Bullet extends Floater {
