@@ -4,10 +4,12 @@
  * Description: Replica of the classic Asteroids game
  */
 
+// TODO Fix index out of bounds caused by asteroid destruction when spawning many bullets at a time
 // TODO Engine fire
 // TODO Fix bullet acceleration
 
 int bgColor = color(0);
+int asteroidCount = 2;
 
 // Declarations
 Star[] stars;
@@ -22,7 +24,7 @@ public void setup() {
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   ship = new SpaceShip();
   asteroids = new ArrayList<Asteroid>();
-  for (int i = 0; i < 10; i++) asteroids.add(new Asteroid());
+  for (int i = 0; i < asteroidCount; i++) asteroids.add(new Asteroid());
   bullets = new ArrayList<Bullet>();
 }
 // Display the game
@@ -139,9 +141,11 @@ public void destroyAsteroids() {
     for (int i = 0; i < asteroids.size (); i++) {
       if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) asteroids.remove(i);
     }
-    for (int i = 1; i < asteroids.size ()+1; i++) {
+    for (int i = 0; i < asteroids.size (); i++) {
       for (Bullet b : bullets) {
-        if (asteroids.get(i-1).distToBullet(b) < 50) asteroids.remove(i-1);
+        println(i);
+        if (asteroids.size() < 1) break;
+        else if (asteroids.get(i).distToBullet(b) < 50) asteroids.remove(i);
       }
     }
   }
@@ -254,7 +258,7 @@ class Asteroid extends Floater {
     yCorners = randomCorners('y', corners);
     rotateSpeed = (int) (Math.random()*11) - 5;
     int grey = (int) (Math.random()*51) + 102;
-    myColor = color(grey, grey, grey, grey);
+    myColor = color(grey, grey, grey);
     myCenterX = Math.random()*width;
     myCenterY = Math.random()*height;
     myDirectionX = Math.random()*6 - 3;
