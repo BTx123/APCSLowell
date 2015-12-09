@@ -4,12 +4,11 @@
  * Description: Replica of the classic Asteroids game
  */
 
-// TODO Fix index out of bounds caused by asteroid destruction when spawning many bullets at a time
 // TODO Engine fire
 // TODO Fix bullet acceleration
 
 int bgColor = color(0);
-int asteroidCount = 2;
+int asteroidCount = 10;
 
 // Declarations
 Star[] stars;
@@ -19,6 +18,7 @@ ArrayList<Bullet> bullets;
 // Initialize stars and spaceship
 public void setup() {
   size(1280, 720);
+  frameRate(60);
   smooth();
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
@@ -137,15 +137,15 @@ public void keyReleased() {
 }
 // Destroy asteroids
 public void destroyAsteroids() {
-  if (asteroids.size () > 0) {
-    for (int i = 0; i < asteroids.size (); i++) {
-      if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) asteroids.remove(i);
-    }
-    for (int i = 0; i < asteroids.size (); i++) {
-      for (Bullet b : bullets) {
-        println(i);
-        if (asteroids.size() < 1) break;
-        else if (asteroids.get(i).distToBullet(b) < 50) asteroids.remove(i);
+  for (int i = 0; i < asteroids.size (); i++) {
+    if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) asteroids.remove(i);
+  }
+  for (int i = 0; i < asteroids.size (); i++) {
+    for (Bullet b : bullets) {
+      println("test");
+      // Ensure asteroids size is more than i to prevent crash, remove asteroid if bullet in range
+      if (asteroids.size() > i && asteroids.get(i).distToBullet(b) < 50) {
+        asteroids.remove(i);
       }
     }
   }
