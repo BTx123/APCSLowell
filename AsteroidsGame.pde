@@ -4,8 +4,8 @@
  * Description: Replica of the classic Asteroids game
  */
 
-// TODO Engine fire
 // TODO Fix bullet acceleration
+// TODO Engine fire
 
 int bgColor = color(0);
 int asteroidCount = 10;
@@ -33,6 +33,7 @@ public void draw() {
   for (int i = 0; i < stars.length; i++) stars[i].display();
   keyActions();
   destroyAsteroids();
+  destroyBullets();
   for (Asteroid a : asteroids) {
     a.move();
     a.show();
@@ -142,11 +143,22 @@ public void destroyAsteroids() {
   }
   for (int i = 0; i < asteroids.size (); i++) {
     for (Bullet b : bullets) {
-      println("test");
       // Ensure asteroids size is more than i to prevent crash, remove asteroid if bullet in range
       if (asteroids.size() > i && asteroids.get(i).distToBullet(b) < 50) {
         asteroids.remove(i);
       }
+    }
+  }
+}
+// Destroy Bullets when they move off the screen
+public void destroyBullets() {
+  for (int i = 0; i < bullets.size (); i++) {
+    int radius = bullets.get(i).mySize/2;
+    int centerX = bullets.get(i).getX();
+    int centerY = bullets.get(i).getY();
+    // Detect bullet if on screen, destroy if off screen
+    if (centerX > width+radius || centerX < 0-radius || centerY > height+radius || centerY < 0-radius) {
+      bullets.remove(i);
     }
   }
 }
@@ -321,6 +333,7 @@ class Asteroid extends Floater {
   }
 }
 class Bullet extends Floater {
+  int mySize;
   public Bullet (SpaceShip ship) {
     myCenterX = ship.getX();
     myCenterY = ship.getY();
@@ -328,6 +341,7 @@ class Bullet extends Floater {
     double dRadians = myPointDirection*(Math.PI/180);
     myDirectionX = 5 * Math.cos(dRadians) + ship.getDirectionX();
     myDirectionY = 5 * Math.sin(dRadians) + ship.getDirectionY();
+    mySize = 10;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -367,7 +381,7 @@ class Bullet extends Floater {
   public void show() {
     noStroke();
     fill(255, 255, 0);
-    ellipse((float) myCenterX, (float) myCenterY, 10, 10);
+    ellipse((float) myCenterX, (float) myCenterY, mySize, mySize);
   }
 }
 // Abstract Floater class 
