@@ -5,6 +5,7 @@
  */
 
 // TODO Fix bullet acceleration
+// TODO Create Game Class
 // TODO Engine fire
 
 int bgColor = color(0);
@@ -44,6 +45,10 @@ public void draw() {
   }
   ship.move();
   ship.show();
+}
+class Game {
+  public Game() {
+  }
 }
 // Fade the screen slightly to create motion blur
 public void screenFade() {
@@ -86,21 +91,13 @@ public void keyPressed() {
     weaponFiring = true;
     bullets.add(new Bullet((SpaceShip) ship));
   }
-  // hyperspace initiated
+  // initiate hyperspace
   if ((key == 'f' || key == 'F') && !hyperspaceActive) {
     hyperspaceActive = true;
-    hyperspace();
+    ((SpaceShip) ship).hyperSpace();
   }
   // detect ship "brakes" presses
   if (keyCode == CONTROL) ctrlPressed = true;
-}
-// Hyperspace to new position facing random direction
-public void hyperspace() {
-  ship.setX((int) (Math.random()*width));
-  ship.setY((int) (Math.random()*height));
-  ship.setPointDirection((int) (Math.random()*360));
-  ship.setDirectionX(0);
-  ship.setDirectionY(0);
 }
 // Respond to key presses
 public void keyActions() {
@@ -108,7 +105,7 @@ public void keyActions() {
   int rotationF = 5;  // rotation in degrees
   // ship navigation
   if (wPressed) ship.accelerate(accelerationF);
-  if (sPressed) ship.accelerate(-accelerationF);
+  //if (sPressed) ship.accelerate(-accelerationF);
   if (aPressed) ship.rotate(-rotationF);
   if (dPressed) ship.rotate(rotationF);
   // ship "brakes" for slowing down
@@ -165,6 +162,7 @@ public void destroyBullets() {
 // Draws the spaceship
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
+  private final int MAX_SPEED;
   SpaceShip() {
     corners = 17;
     myXs = new int[] {
@@ -183,6 +181,7 @@ class SpaceShip extends Floater {
     myDirectionX = 0;
     myDirectionY = 0;
     myPointDirection = 0;
+    MAX_SPEED = 30;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -221,9 +220,13 @@ class SpaceShip extends Floater {
     // change coordinates of direction of travel
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
+    if (Math.abs(myDirectionX) > MAX_SPEED) myDirectionX = MAX_SPEED;
+    println("x: " +  myDirectionX);
+    if (Math.abs(myDirectionY) > MAX_SPEED) myDirectionY = MAX_SPEED;
+    println("y: " +  myDirectionY);
     //enginePropulsion();
   }
-  // TODO Draw engine flames
+  // Draw engine flames
   private void enginePropulsion() {
     int[] flameColors = { 
       color(226, 88, 34), 
@@ -238,7 +241,8 @@ class SpaceShip extends Floater {
     // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
     // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
   }
-  public void hyperspace() {
+  // Hyperspace to new position facing new direction
+  public void hyperSpace() {
     myCenterX = (int) (Math.random()*width);
     myCenterX = (int) (Math.random()*height);
     myPointDirection = (int) (Math.random()*360);
