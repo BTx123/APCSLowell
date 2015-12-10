@@ -14,7 +14,7 @@ int asteroidCount = 10;
 // Declarations
 Star[] stars;
 Floater ship;
-ArrayList<Asteroid> asteroids;
+ArrayList<BigAsteroid> asteroids;
 ArrayList<Bullet> bullets;
 // Initialize stars and spaceship
 public void setup() {
@@ -24,8 +24,8 @@ public void setup() {
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   ship = new SpaceShip();
-  asteroids = new ArrayList<Asteroid>();
-  for (int i = 0; i < asteroidCount; i++) asteroids.add(new Asteroid());
+  asteroids = new ArrayList<BigAsteroid>();
+  for (int i = 0; i < asteroidCount; i++) asteroids.add(new BigAsteroid());
   bullets = new ArrayList<Bullet>();
 }
 // Display the game
@@ -136,14 +136,14 @@ public void keyReleased() {
 // Destroy asteroids
 public void destroyAsteroids() {
   for (int i = 0; i < asteroids.size (); i++) {
-    if (asteroids.get(i).distToShip((SpaceShip) ship) < 50) asteroids.remove(i);
+    println("d: " + asteroids.get(i).distToShip((SpaceShip) ship));
+    println("r: " + asteroids.get(i).getRadius());
+    if (asteroids.get(i).distToShip((SpaceShip) ship) <= asteroids.get(i).getRadius()) asteroids.remove(i);
   }
   for (int i = 0; i < asteroids.size (); i++) {
     for (Bullet b : bullets) {
       // Ensure asteroids size is more than i to prevent crash, remove asteroid if bullet in range
-      if (asteroids.size() > i && asteroids.get(i).distToBullet(b) < 50) {
-        asteroids.remove(i);
-      }
+      if (asteroids.size() > i && asteroids.get(i).distToBullet(b) <= asteroids.get(i).getRadius()) asteroids.remove(i);
     }
   }
 }
@@ -221,9 +221,7 @@ class SpaceShip extends Floater {
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
     if (Math.abs(myDirectionX) > MAX_SPEED) myDirectionX = MAX_SPEED;
-    println("x: " +  myDirectionX);
     if (Math.abs(myDirectionY) > MAX_SPEED) myDirectionY = MAX_SPEED;
-    println("y: " +  myDirectionY);
     //enginePropulsion();
   }
   // Draw engine flames
@@ -267,12 +265,13 @@ class SpaceShip extends Floater {
   }
 }
 class Asteroid extends Floater {
-  private int rotateSpeed;
+  protected int rotateSpeed, radius;
   public Asteroid() {
     corners = 10;
-    xCorners = randomCorners('x', corners);
-    yCorners = randomCorners('y', corners);
-    rotateSpeed = (int) (Math.random()*11) - 5;
+    radius = 0;
+    //xCorners = randomCorners('x', corners, radius);
+    //yCorners = randomCorners('y', corners, radius);
+    rotateSpeed = 0;
     int grey = (int) (Math.random()*51) + 102;
     myColor = color(grey, grey, grey);
     myCenterX = Math.random()*width;
@@ -311,16 +310,19 @@ class Asteroid extends Floater {
   public double getPointDirection() { 
     return myPointDirection;
   }
+  public int getRadius() {
+    return radius;
+  }
   public void move() {
     rotate(rotateSpeed);  // rotate by individually specified amount
     super.move();         // move according to Floater defined move() method
   }
   // Create random corners for the asteroid in a circular method
-  private int[] randomCorners(char dim, int num) {
-    int[] nums = new int[num];
+  protected int[] randomCorners(char dim, int num, int meanRadius) {
+    int[] nums = new int[num];  // number of corners
     float theta = 0;
     for (int i = 0; i < nums.length; i++) {
-      int radius = (int) (Math.random()*51) + 20;  // mean of 50
+      int radius = (int) (Math.random()*(meanRadius+1)) + (meanRadius-30);
       if (dim == 'x') nums[i] = (int) (Math.sin(theta)*radius);
       if (dim == 'y') nums[i] = (int) (Math.cos(theta)*radius);
       theta += TWO_PI/num;
@@ -328,12 +330,28 @@ class Asteroid extends Floater {
     return nums;
   }
   // Return distance from this asteroid to SpaceShip s
-  private float distToShip(SpaceShip s) {
+  protected float distToShip(SpaceShip s) {
     return dist(getX(), getY(), s.getX(), s.getY());
   }
   // Return distance from this asteroid to a Bullet b
-  private float distToBullet(Bullet b) {
+  protected float distToBullet(Bullet b) {
     return dist(getX(), getY(), b.getX(), b.getY());
+  }
+}
+class BigAsteroid extends Asteroid {
+  public BigAsteroid() {
+    radius = 75;
+    xCorners = randomCorners('x', corners, radius);
+    yCorners = randomCorners('y', corners, radius);
+    rotateSpeed = (int) (Math.random()*7) - 5;
+  }
+}
+class SmallAsteroid extends Asteroid {
+  public SmallAsteroid() {
+    radius = 40;
+    xCorners = randomCorners('x', corners, radius);
+    yCorners = randomCorners('y', corners, radius);
+    rotateSpeed = (int) (Math.random()*11) - 5;
   }
 }
 class Bullet extends Floater {
