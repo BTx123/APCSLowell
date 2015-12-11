@@ -11,16 +11,18 @@
 int bgColor = color(0);
 int asteroidCount = 10;
 
-// Declarations
+// Declarations ---------------------------------------------------------------
+Game game;
 Star[] stars;
 Floater ship;
 ArrayList<BigAsteroid> asteroids;
 ArrayList<Bullet> bullets;
-// Initialize stars and spaceship
+// Initialize stars and spaceship ---------------------------------------------
 public void setup() {
   size(1280, 720);
   frameRate(60);
   smooth();
+  game = new Game();
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
   ship = new SpaceShip();
@@ -28,13 +30,14 @@ public void setup() {
   for (int i = 0; i < asteroidCount; i++) asteroids.add(new BigAsteroid());
   bullets = new ArrayList<Bullet>();
 }
-// Display the game
+// Display the game -----------------------------------------------------------
 public void draw() {
-  screenFade();
+  game.screenFade();
+  game.keyActions();
   for (int i = 0; i < stars.length; i++) stars[i].display();
-  keyActions();
-  destroyAsteroids();
-  destroyBullets();
+  game.destroyAsteroids(asteroids, (SpaceShip) ship);
+  game.destroyBullets(bullets);
+  game.destroyShip((SpaceShip) ship);
   for (Asteroid a : asteroids) {
     a.move();
     a.show();
@@ -45,34 +48,9 @@ public void draw() {
   }
   ship.move();
   ship.show();
+  game.UI((SpaceShip) ship);
 }
-class Game {
-  public Game() {
-  }
-}
-// Fade the screen slightly to create motion blur
-public void screenFade() {
-  noStroke();
-  fill(bgColor, 125);
-  rect(0, 0, width, height);
-}
-// Draw monochromatic stars
-class Star {
-  private float myX, myY, myR;
-  private int myColor;
-  public Star() {
-    myX = (float) Math.random()*width;
-    myY = (float) Math.random()*height;
-    myR = (float) Math.random()*31 + 5;
-    myColor = color((int) (Math.random()*256));
-  }
-  public void display() {
-    noStroke();
-    fill(myColor);
-    ellipse(myX, myY, myR, myR);
-  }
-}
-// Detect Spaceship controls
+// Detect Spaceship controls --------------------------------------------------
 boolean wPressed = false;
 boolean sPressed = false;
 boolean aPressed = false;
@@ -80,6 +58,7 @@ boolean dPressed = false;
 boolean weaponFiring = false;
 boolean hyperspaceActive = false;
 boolean ctrlPressed = false;
+// Detect key presses ---------------------------------------------------------
 public void keyPressed() {
   // detect ship navigation presses
   if (key == 'w' || key == 'W') wPressed = true;
@@ -99,27 +78,7 @@ public void keyPressed() {
   // detect ship "brakes" presses
   if (keyCode == CONTROL) ctrlPressed = true;
 }
-// Respond to key presses
-public void keyActions() {
-  double accelerationF = 0.2;
-  int rotationF = 5;  // rotation in degrees
-  // ship navigation
-  if (wPressed) ship.accelerate(accelerationF);
-  //if (sPressed) ship.accelerate(-accelerationF);
-  if (aPressed) ship.rotate(-rotationF);
-  if (dPressed) ship.rotate(rotationF);
-  // ship "brakes" for slowing down
-  if (ctrlPressed) {
-    double reducF = 0.05;
-    if ((Math.abs(ship.getDirectionX()) <= 0.5)) ship.setDirectionX(0);
-    if ((Math.abs(ship.getDirectionY()) <= 0.5)) ship.setDirectionY(0);
-    if (ship.getDirectionX() > 0) ship.setDirectionX(ship.myDirectionX - reducF);
-    else if (ship.getDirectionX() < 0) ship.setDirectionX(ship.myDirectionX + reducF);
-    if (ship.getDirectionY() > 0) ship.setDirectionY(ship.myDirectionY - reducF);
-    else if (ship.getDirectionY() < 0) ship.setDirectionY(ship.myDirectionY + reducF);
-  }
-}
-// For multiple key presses
+// Detect key releases for multiple key presses -------------------------------
 public void keyReleased() {
   // detect ship navigation releases
   if (key == 'w' || key == 'W') wPressed = false;
@@ -133,35 +92,96 @@ public void keyReleased() {
   // detect ship "brakes" release
   if (keyCode == CONTROL) ctrlPressed = false;
 }
-// Destroy asteroids
-public void destroyAsteroids() {
-  for (int i = 0; i < asteroids.size (); i++) {
-    println("d: " + asteroids.get(i).distToShip((SpaceShip) ship));
-    println("r: " + asteroids.get(i).getRadius());
-    if (asteroids.get(i).distToShip((SpaceShip) ship) <= asteroids.get(i).getRadius()) asteroids.remove(i);
+// Game class to store game methods -------------------------------------------
+class Game {
+  public Game() {
   }
-  for (int i = 0; i < asteroids.size (); i++) {
-    for (Bullet b : bullets) {
-      // Ensure asteroids size is more than i to prevent crash, remove asteroid if bullet in range
-      if (asteroids.size() > i && asteroids.get(i).distToBullet(b) <= asteroids.get(i).getRadius()) asteroids.remove(i);
+  // Fade the screen slightly to create motion blur
+  public void screenFade() {
+    noStroke();
+    fill(bgColor, 125);
+    rect(0, 0, width, height);
+  }
+  public void UI(SpaceShip ship) {
+    // display number of lives
+    fill(250, 255, 0);
+    text("Lives: " + ship.getLives(), 0.9*width, 0.9*height);
+  }
+  // Respond to key presses
+  public void keyActions() {
+    double accelerationF = 0.2;
+    int rotationF = 5;  // rotation in degrees
+    // ship navigation
+    if (wPressed) ship.accelerate(accelerationF);
+    //if (sPressed) ship.accelerate(-accelerationF);
+    if (aPressed) ship.rotate(-rotationF);
+    if (dPressed) ship.rotate(rotationF);
+    // ship "brakes" for slowing down
+    if (ctrlPressed) {
+      double reducF = 0.05;
+      if ((Math.abs(ship.getDirectionX()) <= 0.5)) ship.setDirectionX(0);
+      if ((Math.abs(ship.getDirectionY()) <= 0.5)) ship.setDirectionY(0);
+      if (ship.getDirectionX() > 0) ship.setDirectionX(ship.myDirectionX - reducF);
+      else if (ship.getDirectionX() < 0) ship.setDirectionX(ship.myDirectionX + reducF);
+      if (ship.getDirectionY() > 0) ship.setDirectionY(ship.myDirectionY - reducF);
+      else if (ship.getDirectionY() < 0) ship.setDirectionY(ship.myDirectionY + reducF);
     }
   }
-}
-// Destroy Bullets when they move off the screen
-public void destroyBullets() {
-  for (int i = 0; i < bullets.size (); i++) {
-    int radius = bullets.get(i).mySize/2;
-    int centerX = bullets.get(i).getX();
-    int centerY = bullets.get(i).getY();
-    // Detect bullet if on screen, destroy if off screen
-    if (centerX > width+radius || centerX < 0-radius || centerY > height+radius || centerY < 0-radius) {
-      bullets.remove(i);
+  // Destroy asteroids
+  public void destroyAsteroids(ArrayList<BigAsteroid> asteroids, SpaceShip ship) {
+    // crashes into ship
+    for (int i = 0; i < asteroids.size (); i++) {
+      if (asteroids.get(i).distToShip((SpaceShip) ship) <= asteroids.get(i).getRadius()) {
+        asteroids.remove(i);
+        ship.setLives(ship.getLives()-1);
+      }
+    }
+    // bullet hits asteroid
+    for (int i = 0; i < asteroids.size (); i++) {
+      for (Bullet b : bullets) {
+        // Ensure asteroids size is more than i to prevent crash, remove asteroid if bullet in range
+        if (asteroids.size() > i && asteroids.get(i).distToBullet(b) <= asteroids.get(i).getRadius()) asteroids.remove(i);
+      }
     }
   }
+  // Destroy bullets when they move off the screen
+  public void destroyBullets(ArrayList<Bullet> bullets) {
+    for (int i = 0; i < bullets.size (); i++) {
+      int radius = bullets.get(i).mySize/2;
+      int centerX = bullets.get(i).getX();
+      int centerY = bullets.get(i).getY();
+      // Detect bullet if on screen, destroy if off screen
+      if (centerX > width+radius || centerX < 0-radius || centerY > height+radius || centerY < 0-radius) {
+        bullets.remove(i);
+      }
+    }
+  }
+  // Destroy ship when lives reaches 0
+  public void destroyShip(SpaceShip ship) {
+    // end game
+    if (ship.getLives() <= 0) println("dead");
+  }
 }
-// Draws the spaceship
+// Star class to draw monochromatic stars -------------------------------------
+class Star {
+  private float myX, myY, myR;
+  private int myColor;
+  public Star() {
+    myX = (float) Math.random()*width;
+    myY = (float) Math.random()*height;
+    myR = (float) Math.random()*31 + 5;
+    myColor = color((int) (Math.random()*256));
+  }
+  public void display() {
+    noStroke();
+    fill(myColor);
+    ellipse(myX, myY, myR, myR);
+  }
+}
+// Draws the spaceship --------------------------------------------------------
 class SpaceShip extends Floater {
   private int[] myXs, myYs;
+  private int myLives;
   private final int MAX_SPEED;
   SpaceShip() {
     corners = 17;
@@ -175,6 +195,7 @@ class SpaceShip extends Floater {
     };
     xCorners = myXs;
     yCorners = myYs;
+    myLives = 3;
     myColor = color(255, 94, 0);
     myCenterX = width/2;
     myCenterY = height/2;
@@ -182,6 +203,12 @@ class SpaceShip extends Floater {
     myDirectionY = 0;
     myPointDirection = 0;
     MAX_SPEED = 30;
+  }
+  public void setLives(int tempLives) {
+    myLives = tempLives;
+  }
+  public int getLives() {
+    return myLives;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -264,6 +291,7 @@ class SpaceShip extends Floater {
     endShape(CLOSE);
   }
 }
+// Draws Asteroids ------------------------------------------------------------
 class Asteroid extends Floater {
   protected int rotateSpeed, radius;
   public Asteroid() {
@@ -338,6 +366,7 @@ class Asteroid extends Floater {
     return dist(getX(), getY(), b.getX(), b.getY());
   }
 }
+// Draw Big Asteroids ---------------------------------------------------------
 class BigAsteroid extends Asteroid {
   public BigAsteroid() {
     radius = 75;
@@ -346,6 +375,7 @@ class BigAsteroid extends Asteroid {
     rotateSpeed = (int) (Math.random()*7) - 5;
   }
 }
+// Draw Small Asteroids -------------------------------------------------------
 class SmallAsteroid extends Asteroid {
   public SmallAsteroid() {
     radius = 40;
@@ -354,6 +384,7 @@ class SmallAsteroid extends Asteroid {
     rotateSpeed = (int) (Math.random()*11) - 5;
   }
 }
+// Draws bullet ---------------------------------------------------------------
 class Bullet extends Floater {
   int mySize;
   public Bullet (SpaceShip ship) {
@@ -406,7 +437,7 @@ class Bullet extends Floater {
     ellipse((float) myCenterX, (float) myCenterY, mySize, mySize);
   }
 }
-// Abstract Floater class 
+// Abstract Floater class -----------------------------------------------------
 abstract class Floater {  // Do NOT modify the Floater class! Make changes in the SpaceShip class
   protected int corners;  // the number of corners, a triangular floater has 3
   protected int[] xCorners;
@@ -465,4 +496,3 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
     endShape(CLOSE);
   }
 }
-
