@@ -5,7 +5,6 @@
  */
 
 // TODO Fix bullet acceleration
-// TODO Create Game Class
 // TODO Engine fire
 
 int bgColor = color(0);
@@ -20,7 +19,7 @@ ArrayList<Bullet> bullets;
 // Initialize stars and spaceship ---------------------------------------------
 public void setup() {
   size(1280, 720);
-  frameRate(60);
+  frameRate(120);
   smooth();
   game = new Game();
   stars = new Star[100];
@@ -37,7 +36,7 @@ public void draw() {
   for (int i = 0; i < stars.length; i++) stars[i].display();
   game.destroyAsteroids(asteroids, (SpaceShip) ship);
   game.destroyBullets(bullets);
-  game.destroyShip((SpaceShip) ship);
+  //game.destroyShip((SpaceShip) ship);
   for (Asteroid a : asteroids) {
     a.move();
     a.show();
@@ -105,7 +104,17 @@ class Game {
   public void UI(SpaceShip ship) {
     // display number of lives
     fill(250, 255, 0);
+    textSize(30);
     text("Lives: " + ship.getLives(), 0.9*width, 0.9*height);
+    if (ship.myLives <= 0) deathScreen();
+  }
+  private void deathScreen() {
+    noStroke();
+    fill(0);
+    rect(0, 0, width, height);
+    fill(255);
+    textSize(50);
+    text("You Lose!", width/2, height/2);
   }
   // Respond to key presses
   public void keyActions() {
@@ -118,13 +127,13 @@ class Game {
     if (dPressed) ship.rotate(rotationF);
     // ship "brakes" for slowing down
     if (ctrlPressed) {
-      double reducF = 0.05;
-      if ((Math.abs(ship.getDirectionX()) <= 0.5)) ship.setDirectionX(0);
-      if ((Math.abs(ship.getDirectionY()) <= 0.5)) ship.setDirectionY(0);
-      if (ship.getDirectionX() > 0) ship.setDirectionX(ship.myDirectionX - reducF);
-      else if (ship.getDirectionX() < 0) ship.setDirectionX(ship.myDirectionX + reducF);
-      if (ship.getDirectionY() > 0) ship.setDirectionY(ship.myDirectionY - reducF);
-      else if (ship.getDirectionY() < 0) ship.setDirectionY(ship.myDirectionY + reducF);
+      double reducF = 0.99;
+      if (Math.abs(ship.myDirectionX) < 0.1) ship.myDirectionX = 0;
+      if (Math.abs(ship.myDirectionY) < 0.1) ship.myDirectionY = 0;
+      else {
+        if (Math.abs(ship.myDirectionX) > 0) ship.myDirectionX *= reducF;
+        if (Math.abs(ship.myDirectionY) > 0) ship.myDirectionY *= reducF;
+      }
     }
   }
   // Destroy asteroids
@@ -157,10 +166,9 @@ class Game {
     }
   }
   // Destroy ship when lives reaches 0
-  public void destroyShip(SpaceShip ship) {
-    // end game
-    if (ship.getLives() <= 0) println("dead");
-  }
+  //public void destroyShip(SpaceShip ship) {
+  //  if (ship.getLives() <= 0) println("dead");
+  //}
 }
 // Star class to draw monochromatic stars -------------------------------------
 class Star {
@@ -202,13 +210,13 @@ class SpaceShip extends Floater {
     myDirectionX = 0;
     myDirectionY = 0;
     myPointDirection = 0;
-    MAX_SPEED = 30;
+    MAX_SPEED = 15;
   }
   public void setLives(int tempLives) {
     myLives = tempLives;
   }
   public int getLives() {
-    return myLives;
+    return (myLives < 0) ? 0 : myLives;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -247,8 +255,14 @@ class SpaceShip extends Floater {
     // change coordinates of direction of travel
     myDirectionX += ((dAmount) * Math.cos(dRadians));
     myDirectionY += ((dAmount) * Math.sin(dRadians));
-    if (Math.abs(myDirectionX) > MAX_SPEED) myDirectionX = MAX_SPEED;
-    if (Math.abs(myDirectionY) > MAX_SPEED) myDirectionY = MAX_SPEED;
+    if (Math.abs(myDirectionX) > MAX_SPEED) {
+      if (myDirectionX > 0) myDirectionX = MAX_SPEED;
+      else if (myDirectionX < 0) myDirectionX = -MAX_SPEED;
+    }
+    if (Math.abs(myDirectionY) > MAX_SPEED) {
+      if (myDirectionY > 0) myDirectionY = MAX_SPEED;
+      else if (myDirectionY < 0) myDirectionY = -MAX_SPEED;
+    }
     //enginePropulsion();
   }
   // Draw engine flames
@@ -269,7 +283,7 @@ class SpaceShip extends Floater {
   // Hyperspace to new position facing new direction
   public void hyperSpace() {
     myCenterX = (int) (Math.random()*width);
-    myCenterX = (int) (Math.random()*height);
+    myCenterY = (int) (Math.random()*height);
     myPointDirection = (int) (Math.random()*360);
     myDirectionX = 0;
     myDirectionY = 0;
@@ -428,8 +442,8 @@ class Bullet extends Floater {
   }
   public void move() {  
     // change the x and y coordinates by myDirectionX and myDirectionY
-    myCenterX += myDirectionX;
-    myCenterY += myDirectionY;
+    myCenterX += 2*myDirectionX;
+    myCenterY += 2*myDirectionY;
   }
   public void show() {
     noStroke();
