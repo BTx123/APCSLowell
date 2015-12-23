@@ -4,11 +4,12 @@
  * Description: Replica of the classic Asteroids game
  */
 
-// TODO Fix bullet acceleration
+// TODO Create destructible asteroids
 // TODO Engine fire
 
 int bgColor = color(0);
 int asteroidCount = 10;
+int screenNum = 0;
 
 // Declarations ---------------------------------------------------------------
 Game game;
@@ -19,12 +20,13 @@ ArrayList<Bullet> bullets;
 // Initialize stars and spaceship ---------------------------------------------
 public void setup() {
   size(1280, 720);
-  frameRate(120);
+  frameRate(90);
   smooth();
-  game = new Game();
+  ship = new SpaceShip();
+  game = new Game((SpaceShip) ship);
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) stars[i] = new Star();
-  ship = new SpaceShip();
+
   asteroids = new ArrayList<BigAsteroid>();
   for (int i = 0; i < asteroidCount; i++) asteroids.add(new BigAsteroid());
   bullets = new ArrayList<Bullet>();
@@ -34,7 +36,7 @@ public void draw() {
   game.screenFade();
   game.keyActions();
   for (int i = 0; i < stars.length; i++) stars[i].display();
-  game.destroyAsteroids(asteroids, (SpaceShip) ship);
+  game.destroyAsteroids(asteroids);
   game.destroyBullets(bullets);
   //game.destroyShip((SpaceShip) ship);
   for (Asteroid a : asteroids) {
@@ -57,6 +59,10 @@ boolean dPressed = false;
 boolean weaponFiring = false;
 boolean hyperspaceActive = false;
 boolean ctrlPressed = false;
+// Detect mouse presses -------------------------------------------------------
+public void mouseClicked() {
+  screenNum++;
+}
 // Detect key presses ---------------------------------------------------------
 public void keyPressed() {
   // detect ship navigation presses
@@ -93,7 +99,9 @@ public void keyReleased() {
 }
 // Game class to store game methods -------------------------------------------
 class Game {
-  public Game() {
+  SpaceShip myShip;
+  public Game(SpaceShip tempShip) {
+    myShip = tempShip;
   }
   // Fade the screen slightly to create motion blur
   public void screenFade() {
@@ -101,18 +109,44 @@ class Game {
     fill(bgColor, 125);
     rect(0, 0, width, height);
   }
+  // Display screens and ship info
   public void UI(SpaceShip ship) {
     // display number of lives
     fill(250, 255, 0);
     textSize(30);
     text("Lives: " + ship.getLives(), 0.9*width, 0.9*height);
-    if (ship.myLives <= 0) deathScreen();
+    if (screenNum == 0) startScreen();
+    else if (asteroids.size() == 0 && bullets.size() == 0) winScreen();
+    else if (ship.myLives <= 0) deathScreen();
   }
+  // Beginning screen
+  private void startScreen() {
+    noStroke();
+    fill(0);
+    rect(0, 0, width, height);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    text("Click to begin...", width/2, height/2);
+    myShip.setLives(3);
+  }
+  // Win screen
+  private void winScreen() {
+    noStroke();
+    fill(0);
+    rect(0, 0, width, height);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    text("You Win!", width/2, height/2);
+  }
+  // End screen on death
   private void deathScreen() {
     noStroke();
     fill(0);
     rect(0, 0, width, height);
     fill(255);
+    textAlign(CENTER, CENTER);
     textSize(50);
     text("You Lose!", width/2, height/2);
   }
@@ -137,12 +171,12 @@ class Game {
     }
   }
   // Destroy asteroids
-  public void destroyAsteroids(ArrayList<BigAsteroid> asteroids, SpaceShip ship) {
+  public void destroyAsteroids(ArrayList<BigAsteroid> asteroids) {
     // crashes into ship
     for (int i = 0; i < asteroids.size (); i++) {
       if (asteroids.get(i).distToShip((SpaceShip) ship) <= asteroids.get(i).getRadius()) {
         asteroids.remove(i);
-        ship.setLives(ship.getLives()-1);
+        myShip.setLives(myShip.getLives()-1);
       }
     }
     // bullet hits asteroid
@@ -165,10 +199,6 @@ class Game {
       }
     }
   }
-  // Destroy ship when lives reaches 0
-  //public void destroyShip(SpaceShip ship) {
-  //  if (ship.getLives() <= 0) println("dead");
-  //}
 }
 // Star class to draw monochromatic stars -------------------------------------
 class Star {
@@ -266,20 +296,20 @@ class SpaceShip extends Floater {
     //enginePropulsion();
   }
   // Draw engine flames
-  private void enginePropulsion() {
-    int[] flameColors = { 
-      color(226, 88, 34), 
-      color(255, 153, 0), 
-      color(255, 165, 0), 
-      color(255, 88, 0), 
-      color(255, 209, 220)
-    };
-    strokeWeight(10);
-    stroke(flameColors[(int) (Math.random()*flameColors.length)]);
-    point((float) (ship.getX()-ship.getDirectionX()), (float) (ship.getY()-ship.getDirectionY()));
-    // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
-    // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
-  }
+  //private void enginePropulsion() {
+  //  int[] flameColors = { 
+  //    color(226, 88, 34), 
+  //    color(255, 153, 0), 
+  //    color(255, 165, 0), 
+  //    color(255, 88, 0), 
+  //    color(255, 209, 220)
+  //  };
+  //  strokeWeight(10);
+  //  stroke(flameColors[(int) (Math.random()*flameColors.length)]);
+  //  point((float) (ship.getX()-ship.getDirectionX()), (float) (ship.getY()-ship.getDirectionY()));
+  //  // fill(color(flameColors[(int) (Math.random()*flameColors.length)]));
+  //  // ellipse((float) (myDirectionX-myCenterX), (float) (myDirectionY-myCenterY), 100, 100);
+  //}
   // Hyperspace to new position facing new direction
   public void hyperSpace() {
     myCenterX = (int) (Math.random()*width);
@@ -305,7 +335,7 @@ class SpaceShip extends Floater {
     endShape(CLOSE);
   }
 }
-// Draws Asteroids ------------------------------------------------------------
+// Draws Asteroid -------------------------------------------------------------
 class Asteroid extends Floater {
   protected int rotateSpeed, radius;
   public Asteroid() {
@@ -380,7 +410,7 @@ class Asteroid extends Floater {
     return dist(getX(), getY(), b.getX(), b.getY());
   }
 }
-// Draw Big Asteroids ---------------------------------------------------------
+// Draw Big Asteroid ----------------------------------------------------------
 class BigAsteroid extends Asteroid {
   public BigAsteroid() {
     radius = 75;
@@ -389,7 +419,7 @@ class BigAsteroid extends Asteroid {
     rotateSpeed = (int) (Math.random()*7) - 5;
   }
 }
-// Draw Small Asteroids -------------------------------------------------------
+// Draw Small Asteroid --------------------------------------------------------
 class SmallAsteroid extends Asteroid {
   public SmallAsteroid() {
     radius = 40;
@@ -400,7 +430,7 @@ class SmallAsteroid extends Asteroid {
 }
 // Draws bullet ---------------------------------------------------------------
 class Bullet extends Floater {
-  int mySize;
+  int mySize, mySpeed;
   public Bullet (SpaceShip ship) {
     myCenterX = ship.getX();
     myCenterY = ship.getY();
@@ -409,6 +439,7 @@ class Bullet extends Floater {
     myDirectionX = 5 * Math.cos(dRadians) + ship.getDirectionX();
     myDirectionY = 5 * Math.sin(dRadians) + ship.getDirectionY();
     mySize = 10;
+    mySpeed = 5;
   }
   public void setX(int tempX) { 
     myCenterX = tempX;
@@ -440,10 +471,9 @@ class Bullet extends Floater {
   public double getPointDirection() { 
     return myPointDirection;
   }
-  public void move() {  
-    // change the x and y coordinates by myDirectionX and myDirectionY
-    myCenterX += 2*myDirectionX;
-    myCenterY += 2*myDirectionY;
+  public void move() {
+    myCenterX += myDirectionX;
+    myCenterY += myDirectionY;
   }
   public void show() {
     noStroke();
