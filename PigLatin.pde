@@ -35,8 +35,8 @@ public int findFirstVowel(String sWord) {
 public String pigLatin(String sWord) {
   //precondition: sWord is a valid String of length greater than 0
   //postcondition: returns the pig latin equivalent of sWord
-  int firstVowel = findFirstVowel(sWord);
   boolean isCapitalized = Character.isUpperCase(sWord.charAt(0));
+  int firstVowel = findFirstVowel(sWord);
   // if string begins with qu, move qu to end + "ay"
   if (sWord.length() > 2 && sWord.substring(0, 2).equals("qu")) sWord = sWord.substring(2) + "quay";
   // if string begins with consonant, move leading consonant(s) to end + "ay"
@@ -48,16 +48,11 @@ public String pigLatin(String sWord) {
   // Capitalization
   if (isCapitalized) sWord = sWord.substring(0, 1).toUpperCase() + sWord.substring(1).toLowerCase();
   // Punctuation
-  char[] punct = { ',', '.', '\'' };
+  String s = new String();
+  String punct = new String();
   for (int i = 0; i < sWord.length(); i++) {
-    for (char p : punct) {
-      if (sWord.charAt(i) == p) {
-        String sWordFront = sWord.substring(0, i);
-        String sWordBack = sWord.substring(i);
-        sWord = sWordFront + sWordBack + sWord.charAt(i);
-      }
-    }
-    break;
+    if (sWord.charAt(i) != ',' && sWord.charAt(i) != '.' && sWord.charAt(i) != '\'') s += sWord.substring(i, i+1);
+    else punct = sWord.substring(i, i+1);
   }
-  return sWord;
+  return s + punct;
 }
