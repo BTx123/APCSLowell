@@ -7,24 +7,23 @@ public void setup() {
   }
 }
 public boolean palindrome(String word) {
+  // remove spaces, punctuation, and capitalization
+  word = charsOnly(word);
   // split word at middle
-  int mid = Math.round(word.length()/2.0);
-  String sFront = word.substring(0, mid);
-  String sBack = word.substring(mid-1);
+  int mid = word.length()/2;
+  String sFront = word.substring(0, mid+1);
+  String sBack = word.substring(mid);
+  if (word.length()%2 == 0) { // even number of chars
+    sFront = word.substring(0, mid);
+    sBack = word.substring(mid);
+  }
+  else { // odd number of chars
+    sFront = word.substring(0, mid+1);
+    sBack = word.substring(mid);
+  }
   // reverse one of the strings
   sBack = reverse(sBack);
-  // remove spaces
-  sFront = noSpaces(sFront);
-  sBack = noSpaces(sBack);
-  // remove all capital letters with .toLowerCase()
-  sFront = sFront.toLowerCase();
-  sBack = sBack.toLowerCase();
-  // remove all punctuation by checking whether Character.isLetter(c) == true
-  sFront = removPunct(sFront);
-  sBack = removPunct(sBack);
   // compare the two strings, return true if both strings are equal
-  println(sFront);
-  println(sBack);
   if (sFront.equals(sBack)) return true;
   return false;
 }
@@ -35,17 +34,10 @@ public String reverse(String word) {
   }
   return s;
 }
-public String noSpaces(String word) {
-  String s = new String();
-  for (int i = 0; i < word.length(); i++) {
-    if (word.charAt(i) != ' ') s += word.charAt(i);
-  }
-  return s;
-}
-public String removPunct(String word) {
+public String charsOnly(String word) {
   String s = new String();
   for (int i = 0; i < word.length(); i++) {
     if (Character.isLetter(word.charAt(i))) s += word.charAt(i);
   }
-  return s;
+  return s.toLowerCase();
 }
