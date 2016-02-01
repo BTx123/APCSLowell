@@ -7,6 +7,8 @@ public void setup() {
   }
 }
 public boolean palindrome(String word) {
+  // empty strings are palindromes
+  if (word.equals("")) return true;
   // remove spaces, punctuation, and capitalization
   word = charsOnly(word);
   // split word at middle
