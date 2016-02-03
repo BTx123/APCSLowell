@@ -1,13 +1,13 @@
 float xPos, yPos, len, eqHeight, xOff, yOff;
 public void setup() {
-  size(400, 400);
+  size(800, 800);
   len = width;
   eqHeight = (float) Math.sqrt(3)*len/2;
 }
 public void draw() {
   background(0);
-  xPos = 0;
-  yPos = 400;
+  xPos = width/2;
+  yPos = height/2;
   xOff = len/2;
   yOff = eqHeight/2;
   changeSize();
@@ -17,6 +17,8 @@ public void sierpinski(float x, float y, float base, float eqHeight) {
   noStroke();
   fill(255);
   if (base >= 3) {
+    x = x-base/4;
+    y = y+base/4;
     sierpinski(x, y, base/2, eqHeight/2);
     sierpinski(x+base/2, y, base/2, eqHeight/2);
     sierpinski(x+base/4, y-base/2, base/2, eqHeight/2);
