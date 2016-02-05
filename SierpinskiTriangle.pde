@@ -1,3 +1,9 @@
+/* Sierpinski Triangle
+ * Author: Brian Tom
+ * Date: 1/25/16
+ * Description: Draw an interactive Sierpinski Triangle
+ */
+
 float xPos, yPos, len, xOff, yOff, lim;
 public void setup() {
   size(800, 800);
