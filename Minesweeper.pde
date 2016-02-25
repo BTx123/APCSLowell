@@ -6,9 +6,9 @@
 
 import de.bezier.guido.*;
 
-private static final int NUM_ROWS  = 20; // number of rows
-private static final int NUM_COLS  = 20; // number of columns
-private static final int NUM_BOMBS = 10; // number of bombs
+private static final int NUM_ROWS  = 25; // number of rows
+private static final int NUM_COLS  = 25; // number of columns
+private static final int NUM_BOMBS = 20; // number of bombs
 private MSButton[][] buttons;            // 2d array of minesweeper buttons
 private ArrayList<MSButton> bombs;       // ArrayList of just the minesweeper buttons that are mined
 
@@ -42,16 +42,21 @@ public void draw () {
 public boolean isWon() {
   for (int y = 0; y < NUM_ROWS; y++) {
     for (int x = 0; x < NUM_COLS; x++) {
-      if (!bombs.contains(buttons[x][y]) && !buttons[x][y].isClicked()) return false;
+      if (!bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) return false;
     }
   }
   return true;
 }
 public void displayLosingMessage() {
+  for (int y = 0; y < NUM_ROWS; y++) {
+    for (int x = 0; x < NUM_COLS; x++) {
+      if (bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) buttons[y][x].clicked = true;
+    }
+  }
   println("LOSE!");
-  text("LOSE!", 200, 200);
 }
 public void displayWinningMessage() {
+  text("WIN!", 200, 200);
   println("WIN!");
 }
 
@@ -60,7 +65,7 @@ public class MSButton {
   private float x, y, width, height;
   private boolean clicked, marked;
   private String label;
-  public MSButton ( int rr, int cc ) {
+  public MSButton (int rr, int cc) {
     width = 400/NUM_COLS;
     height = 400/NUM_ROWS;
     r = rr;
