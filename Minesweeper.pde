@@ -47,6 +47,7 @@ public boolean isWon() {
   }
   return true;
 }
+// Show losing message if bomb is clicked
 public void displayLosingMessage() {
   for (int y = 0; y < NUM_ROWS; y++) {
     for (int x = 0; x < NUM_COLS; x++) {
@@ -55,6 +56,7 @@ public void displayLosingMessage() {
   }
   println("LOSE!");
 }
+// Show winning message if all bombs are found
 public void displayWinningMessage() {
   text("WIN!", 200, 200);
   println("WIN!");
@@ -85,24 +87,21 @@ public class MSButton {
   // called by manager
   public void mousePressed () {
     clicked = true;
-    if (keyPressed) marked = !marked;
-    else if (bombs.contains(this)) displayLosingMessage();
-    else if (countBombs(r, c) > 0) label = Integer.toString(countBombs(r, c));
-    else {
-      // up
-      if (isValid(r-1, c) && !buttons[r-1][c].isClicked())
+    if (keyPressed) marked = !marked; // mark unmarked buttons
+    else if (bombs.contains(this)) displayLosingMessage(); // display lose screen if bomb is pressed
+    else if (countBombs(r, c) > 0) label = Integer.toString(countBombs(r, c)); // show number of nearby bombs
+    else { // recursively mark buttons that are unmarked and not bombs
+      if (isValid(r-1, c) && !buttons[r-1][c].isClicked()) // up
         buttons[r-1][c].mousePressed();
-      // down
-      if (isValid(r+1, c) && !buttons[r+1][c].isClicked())
+      if (isValid(r+1, c) && !buttons[r+1][c].isClicked()) // down
         buttons[r+1][c].mousePressed();
-      // left
-      if (isValid(r, c-1) && !buttons[r][c-1].isClicked())
+      if (isValid(r, c-1) && !buttons[r][c-1].isClicked()) // left
         buttons[r][c-1].mousePressed();
-      // right
-      if (isValid(r, c+1) && !buttons[r][c+1].isClicked())
+      if (isValid(r, c+1) && !buttons[r][c+1].isClicked()) // right
         buttons[r][c+1].mousePressed();
     }
   }
+  // Draw buttons
   public void draw () {    
     if (marked) fill(0);
     else if (clicked && bombs.contains(this)) fill(255, 0, 0);
@@ -112,12 +111,15 @@ public class MSButton {
     fill(0);
     text(label, x+width/2, y+height/2);
   }
+  // String label for buttons
   public void setLabel(String newLabel) {
     label = newLabel;
   }
+  // Chekc if button is within array limits
   public boolean isValid(int r, int c) {
     return r >= 0 && r < NUM_ROWS && c >= 0 && c < NUM_COLS;
   }
+  // Return the number of bombs surrounding buttons
   public int countBombs(int row, int col) {
     int numBombs = 0;
     // left
