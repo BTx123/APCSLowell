@@ -8,7 +8,7 @@ import de.bezier.guido.*;
 
 private static final int NUM_ROWS  = 25; // number of rows
 private static final int NUM_COLS  = 25; // number of columns
-private static final int NUM_BOMBS = 20; // number of bombs
+private static final int NUM_BOMBS = 10; // number of bombs
 private MSButton[][] buttons;            // 2d array of minesweeper buttons
 private ArrayList<MSButton> bombs;       // ArrayList of just the minesweeper buttons that are mined
 
@@ -25,7 +25,7 @@ void setup () {
   bombs = new ArrayList<MSButton>();
   setBombs();
 }
-
+// Add randomized bombs to board
 public void setBombs() {
   while (bombs.size() < NUM_BOMBS) {
     int row = (int) (Math.random()*NUM_ROWS);
@@ -36,8 +36,7 @@ public void setBombs() {
 
 public void draw () {
   background(0);
-  if (isWon())
-    displayWinningMessage();
+  if (isWon()) displayWinningMessage();
 }
 public boolean isWon() {
   for (int y = 0; y < NUM_ROWS; y++) {
@@ -54,10 +53,20 @@ public void displayLosingMessage() {
       if (bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) buttons[y][x].clicked = true;
     }
   }
+  String message = "YOU LOSE!";
+  char[] c = message.toCharArray();
+  for (int x = 0; x < c.length; x++) {
+    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(String.valueOf(c[x]));
+  }
   println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
+  String message = "YOU WIN!";
+  char[] c = message.toCharArray();
+  for (int x = 0; x < c.length; x++) {
+    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(String.valueOf(c[x]));
+  }
   text("WIN!", 200, 200);
   println("WIN!");
 }
@@ -86,9 +95,9 @@ public class MSButton {
   }
   // called by manager
   public void mousePressed () {
-    clicked = true;
-    if (keyPressed) marked = !marked; // mark unmarked buttons
-    else if (bombs.contains(this)) displayLosingMessage(); // display lose screen if bomb is pressed
+    if (!marked && mouseButton == LEFT) clicked = true;
+    if (mouseButton == RIGHT) marked = !marked; // mark unmarked buttons
+    else if (!marked && bombs.contains(this)) displayLosingMessage(); // display lose screen if bomb is pressed
     else if (countBombs(r, c) > 0) label = Integer.toString(countBombs(r, c)); // show number of nearby bombs
     else { // recursively mark buttons that are unmarked and not bombs
       if (isValid(r-1, c) && !buttons[r-1][c].isClicked()) // up
@@ -100,9 +109,10 @@ public class MSButton {
       if (isValid(r, c+1) && !buttons[r][c+1].isClicked()) // right
         buttons[r][c+1].mousePressed();
     }
+    //if (mouseButton == RIGHT) marked = !marked;
   }
   // Draw buttons
-  public void draw () {    
+  public void draw () {
     if (marked) fill(0);
     else if (clicked && bombs.contains(this)) fill(255, 0, 0);
     else if (clicked) fill(200);
