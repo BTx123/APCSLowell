@@ -66,7 +66,7 @@ public void displayWinningMessage() {
   String message = "YOU WIN!";
   char[] c = message.toCharArray();
   for (int x = 0; x < c.length; x++) {
-    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(String.valueOf(c[x]));
+    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(""+c[x]);
   }
   text("WIN!", 200, 200);
   println("WIN!");
