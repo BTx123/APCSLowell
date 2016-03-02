@@ -99,7 +99,7 @@ public class MSButton {
     if (!marked && mouseButton == LEFT) clicked = true;
     if (mouseButton == RIGHT) marked = !marked; // mark unmarked buttons
     else if (!marked && bombs.contains(this)) displayLosingMessage(); // display lose screen if bomb is pressed
-    else if (countBombs(r, c) > 0) label = String.valueOf(countBombs(r, c)); // show number of nearby bombs
+    else if (countBombs(r, c) > 0) label = ""+countBombs(r, c); // show number of nearby bombs
     else { // recursively mark buttons that are unmarked and not bombs
       if (isValid(r-1, c) && !buttons[r-1][c].isClicked()) // up
         buttons[r-1][c].mousePressed();
