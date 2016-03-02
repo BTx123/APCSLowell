@@ -62,7 +62,6 @@ public void displayLosingMessage() {
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
-  fill(0);
   String message = "YOU WIN!";
   char[] c = message.toCharArray();
   for (int x = 0; x < c.length; x++) {
