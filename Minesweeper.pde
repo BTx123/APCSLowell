@@ -62,6 +62,7 @@ public void displayLosingMessage() {
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
+  fill(0);
   String message = "YOU WIN!";
   char[] c = message.toCharArray();
   for (int x = 0; x < c.length; x++) {
@@ -109,7 +110,6 @@ public class MSButton {
       if (isValid(r, c+1) && !buttons[r][c+1].isClicked()) // right
         buttons[r][c+1].mousePressed();
     }
-    //if (mouseButton == RIGHT) marked = !marked;
   }
   // Draw buttons
   public void draw () {
