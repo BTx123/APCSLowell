@@ -67,7 +67,10 @@ public void displayWinningMessage() {
 // Display message in the center of the board
 public void displayMessage(String message) {
   for (int x = 0; x < message.length(); x++) {
-    buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x].setLabel(message.substring(x, x+1));
+    if (!bombs.contains(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x])) {
+      bombs.add(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x]);
+      buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x].setLabel(message.substring(x, x+1));
+    }
   }
 }
 // Button Class
