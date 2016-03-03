@@ -48,6 +48,7 @@ public boolean isWon() {
 }
 // Show losing message if bomb is clicked
 public void displayLosingMessage() {
+  buttons[0][0].setLabel("W");
   for (int y = 0; y < NUM_ROWS; y++) {
     for (int x = 0; x < NUM_COLS; x++) {
       if (bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) buttons[y][x].clicked = true;
