@@ -54,23 +54,23 @@ public void displayLosingMessage() {
     }
   }
   String message = "YOU LOSE!";
-  char[] c = message.toCharArray();
-  for (int x = 0; x < c.length; x++) {
-    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(""+c[x]);
-  }
+  displayMessage(message);
   println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
   String message = "YOU WIN!";
-  char[] c = message.toCharArray();
-  for (int x = 0; x < c.length; x++) {
-    buttons[NUM_ROWS/2][(NUM_COLS-c.length)/2+x].setLabel(""+c[x]);
-  }
+  displayMessage(message);
   text("WIN!", 200, 200);
   println("WIN!");
 }
-
+// Display message in the center of the board
+public void displayMessage(String message) {
+  for (int x = 0; x < message.length(); x++) {
+    buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x].setLabel(message.substring(x, x+1));
+  }
+}
+// Button Class
 public class MSButton {
   private int r, c;
   private float x, y, width, height;
