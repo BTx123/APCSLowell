@@ -8,7 +8,7 @@ import de.bezier.guido.*;
 
 private static final int NUM_ROWS  = 25; // number of rows
 private static final int NUM_COLS  = 25; // number of columns
-private static final int NUM_BOMBS = 10; // number of bombs
+private static final int NUM_BOMBS = 20; // number of bombs
 private MSButton[][] buttons;            // 2d array of minesweeper buttons
 private ArrayList<MSButton> bombs;       // ArrayList of just the minesweeper buttons that are mined
 
@@ -48,7 +48,6 @@ public boolean isWon() {
 }
 // Show losing message if bomb is clicked
 public void displayLosingMessage() {
-  buttons[0][0].setLabel("W");
   for (int y = 0; y < NUM_ROWS; y++) {
     for (int x = 0; x < NUM_COLS; x++) {
       if (bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) buttons[y][x].clicked = true;
@@ -100,7 +99,7 @@ public class MSButton {
   // called by manager
   public void mousePressed () {
     if (!marked && mouseButton == LEFT) clicked = true;
-    if (mouseButton == RIGHT) marked = !marked; // mark unmarked buttons
+    if (mouseButton == RIGHT && !clicked) marked = !marked; // mark unmarked buttons
     else if (!marked && bombs.contains(this)) displayLosingMessage(); // display lose screen if bomb is pressed
     else if (countBombs(r, c) > 0) label = ""+countBombs(r, c); // show number of nearby bombs
     else { // recursively mark buttons that are unmarked and not bombs
