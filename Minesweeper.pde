@@ -55,14 +55,14 @@ public void displayLosingMessage() {
   }
   String message = new String("YOU LOSE!");
   displayMessage(message);
-  println("LOSE!");
+  System.out.println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
   String message = new String("YOU WIN!");
   displayMessage(message);
   text("WIN!", 200, 200);
-  println("WIN!");
+  System.out.println("WIN!");
 }
 // Display message in the center of the board
 public void displayMessage(String message) {
