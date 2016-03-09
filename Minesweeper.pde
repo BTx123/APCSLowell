@@ -8,7 +8,7 @@ import de.bezier.guido.*;
 
 private static final int NUM_ROWS  = 25; // number of rows
 private static final int NUM_COLS  = 25; // number of columns
-private static final int NUM_BOMBS = 20; // number of bombs
+private static final int NUM_BOMBS = 5; // number of bombs
 private MSButton[][] buttons;            // 2d array of minesweeper buttons
 private ArrayList<MSButton> bombs;       // ArrayList of just the minesweeper buttons that are mined
 
@@ -54,27 +54,31 @@ public void displayLosingMessage() {
     }
   }
   String message = new String("YOU LOSE!");
-  displayMessage(message);
-  buttons[0][0].setLabel("L");
+  //displayMessage(message);
+  for (int i = 0; i < message.length(); i++) {
+    buttons[12][i+8].setLabel(message.substring(i,i+1));
+  }
   //System.out.println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
   String message = new String("YOU WIN!");
-  displayMessage(message);
-  buttons[0][0].setLabel("W");
+  //displayMessage(message);
+  for (int i = 0; i < message.length(); i++) {
+    buttons[12][i+9].setLabel(message.substring(i,i+1));
+  }
   text("WIN!", 200, 200);
   //System.out.println("WIN!");
 }
 // Display message in the center of the board
-public void displayMessage(String message) {
-  for (int x = 0; x < message.length(); x++) {
-    if (!bombs.contains(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x])) {
-      bombs.add(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x]);
-      buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x].setLabel(message.substring(x, x+1));
-    }
-  }
-}
+//public void displayMessage(String message) {
+//  for (int x = 0; x < message.length(); x++) {
+//    if (!bombs.contains(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x])) {
+//      bombs.add(buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x]);
+//      buttons[NUM_ROWS/2][(NUM_COLS-message.length())/2+x].setLabel(message.substring(x, x+1));
+//    }
+//  }
+//}
 // Button Class
 public class MSButton {
   private int r, c;
