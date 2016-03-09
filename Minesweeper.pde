@@ -56,7 +56,7 @@ public void displayLosingMessage() {
   //String message = new String("YOU LOSE!");
   //displayMessage(message);
   buttons[0][0].setLabel("L");
-  System.out.println("LOSE!");
+  //System.out.println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
@@ -64,7 +64,7 @@ public void displayWinningMessage() {
   //displayMessage(message);
   buttons[0][0].setLabel("W");
   text("WIN!", 200, 200);
-  System.out.println("WIN!");
+  //System.out.println("WIN!");
 }
 // Display message in the center of the board
 public void displayMessage(String message) {
