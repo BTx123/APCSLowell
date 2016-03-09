@@ -53,14 +53,16 @@ public void displayLosingMessage() {
       if (bombs.contains(buttons[y][x]) && !buttons[y][x].isClicked()) buttons[y][x].clicked = true;
     }
   }
-  String message = new String("YOU LOSE!");
-  displayMessage(message);
+  //String message = new String("YOU LOSE!");
+  //displayMessage(message);
+  buttons[0][0].setLabel("L");
   System.out.println("LOSE!");
 }
 // Show winning message if all bombs are found
 public void displayWinningMessage() {
-  String message = new String("YOU WIN!");
-  displayMessage(message);
+  //String message = new String("YOU WIN!");
+  //displayMessage(message);
+  buttons[0][0].setLabel("W");
   text("WIN!", 200, 200);
   System.out.println("WIN!");
 }
