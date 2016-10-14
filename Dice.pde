@@ -41,8 +41,8 @@ void draw()
   textSize(24);
   text("Total Sum: " + diceSum, (float) width/16, (float) (height + width)/2);
   textSize(16);
-  text("Min Sum: " + numDice, (float) width/16, (float) (height + width)/2 + 10);
-  text("Max Sum: " + 6*numDice, (float) 4*width/16, (float) (height + width)/2 + 10);
+  text("Min Sum: " + numDice, (float) width/16, (float) (height + width)/2 + 13);
+  text("Max Sum: " + 6*numDice, (float) 3*width/16, (float) (height + width)/2 + 13);
   text("Rows: " + rows, (float) 7*width/16, (float) (height + width)/2 - 10);
   text("Columns: " + columns, (float) 7*width/16, (float) (height + width)/2 + 10);
   text("# of Dice: " + numDice, (float) 11*width/16, (float) (height + width)/2 - 10);
