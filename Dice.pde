@@ -37,7 +37,7 @@ void draw()
   }
   // display sum of all dice values, # of rows & columns, # of dice
   fill(150, 25, 25);
-  numDice = rows*columns
+  int numDice = rows*columns
   textSize(24);
   text("Total Sum: " + diceSum, (float) width/16, (float) (height + width)/2);
   textSize(16);
