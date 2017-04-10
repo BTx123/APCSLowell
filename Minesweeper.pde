@@ -8,7 +8,7 @@ import de.bezier.guido.*;
 
 private static final int NUM_ROWS  = 25; // number of rows
 private static final int NUM_COLS  = 25; // number of columns
-private static final int NUM_BOMBS = 20; // number of bombs
+private static final int NUM_BOMBS = 50; // number of bombs
 private MSButton[][] buttons;            // 2d array of minesweeper buttons
 private ArrayList<MSButton> bombs;       // ArrayList of just the minesweeper buttons that are mined
 
