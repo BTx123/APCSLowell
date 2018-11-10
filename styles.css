@@ -1,0 +1,24 @@
+
+body {
+    background-color: rgb(200,200,200);
+    background-image: url("GlowDice.jpg");
+    color: rgb(255, 255, 255);
+    font-family: ‘Metrophobic’, Arial, serif; font-weight: 400; 
+    text-align: center;
+}
+
+#content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+header {
+	
+}
+
+footer {
+	font-style: italic;
+	font-size: 90%;
+}
+
