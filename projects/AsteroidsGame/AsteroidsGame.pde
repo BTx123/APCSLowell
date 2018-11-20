@@ -224,11 +224,11 @@ class SpaceShip extends Floater {
   SpaceShip() {
     corners = 17;
     myXs = new int[] {
-      25, 0, -5, 0, -10, -10, -25, -20, -10, 
+      25, 0, -5, 0, -10, -10, -25, -20, -10,
       -20, -25, -10, -10, 0, -5, 0, 25
     };
-    myYs = new int[] { 
-      0, -10, -5, -20, -15, -10, -15, -5, 0, 
+    myYs = new int[] {
+      0, -10, -5, -20, -15, -10, -15, -5, 0,
       5, 15, 10, 15, 20, 5, 10, 0
     };
     xCorners = myXs;
@@ -248,34 +248,34 @@ class SpaceShip extends Floater {
   public int getLives() {
     return (myLives < 0) ? 0 : myLives;
   }
-  public void setX(int tempX) { 
+  public void setX(int tempX) {
     myCenterX = tempX;
   }
-  public int getX() { 
+  public int getX() {
     return (int) myCenterX;
   }
-  public void setY(int tempY) { 
+  public void setY(int tempY) {
     myCenterY = tempY;
   }
-  public int getY() { 
+  public int getY() {
     return (int) myCenterY;
   }
-  public void setDirectionX(double tempX) { 
+  public void setDirectionX(double tempX) {
     myDirectionX = tempX;
   }
-  public double getDirectionX() { 
+  public double getDirectionX() {
     return myDirectionX;
   }
-  public void setDirectionY(double tempY) { 
+  public void setDirectionY(double tempY) {
     myDirectionY = tempY;
   }
-  public double getDirectionY() { 
+  public double getDirectionY() {
     return myDirectionY;
   }
-  public void setPointDirection(int tempDegrees) { 
+  public void setPointDirection(int tempDegrees) {
     myPointDirection = tempDegrees;
   }
-  public double getPointDirection() { 
+  public double getPointDirection() {
     return myPointDirection;
   }
   // Accelerates the floater in the direction it is pointing (myPointDirection)
@@ -297,11 +297,11 @@ class SpaceShip extends Floater {
   }
   // Draw engine flames
   //private void enginePropulsion() {
-  //  int[] flameColors = { 
-  //    color(226, 88, 34), 
-  //    color(255, 153, 0), 
-  //    color(255, 165, 0), 
-  //    color(255, 88, 0), 
+  //  int[] flameColors = {
+  //    color(226, 88, 34),
+  //    color(255, 153, 0),
+  //    color(255, 165, 0),
+  //    color(255, 88, 0),
   //    color(255, 209, 220)
   //  };
   //  strokeWeight(10);
@@ -352,34 +352,34 @@ class Asteroid extends Floater {
     myDirectionY = Math.random()*6 - 3;
     myPointDirection = 0;
   }
-  public void setX(int tempX) { 
+  public void setX(int tempX) {
     myCenterX = tempX;
   }
-  public int getX() { 
+  public int getX() {
     return (int) myCenterX;
   }
-  public void setY(int tempY) { 
+  public void setY(int tempY) {
     myCenterY = tempY;
   }
-  public int getY() { 
+  public int getY() {
     return (int) myCenterY;
   }
-  public void setDirectionX(double tempX) { 
+  public void setDirectionX(double tempX) {
     myDirectionX = tempX;
   }
-  public double getDirectionX() { 
+  public double getDirectionX() {
     return myDirectionX;
   }
-  public void setDirectionY(double tempY) { 
+  public void setDirectionY(double tempY) {
     myDirectionY = tempY;
   }
-  public double getDirectionY() { 
+  public double getDirectionY() {
     return myDirectionY;
   }
-  public void setPointDirection(int tempDegrees) { 
+  public void setPointDirection(int tempDegrees) {
     myPointDirection = tempDegrees;
   }
-  public double getPointDirection() { 
+  public double getPointDirection() {
     return myPointDirection;
   }
   public int getRadius() {
@@ -441,34 +441,34 @@ class Bullet extends Floater {
     mySize = 10;
     mySpeed = 5;
   }
-  public void setX(int tempX) { 
+  public void setX(int tempX) {
     myCenterX = tempX;
   }
-  public int getX() { 
+  public int getX() {
     return (int) myCenterX;
   }
-  public void setY(int tempY) { 
+  public void setY(int tempY) {
     myCenterY = tempY;
   }
-  public int getY() { 
+  public int getY() {
     return (int) myCenterY;
   }
-  public void setDirectionX(double tempX) { 
+  public void setDirectionX(double tempX) {
     myDirectionX = tempX;
   }
-  public double getDirectionX() { 
+  public double getDirectionX() {
     return myDirectionX;
   }
-  public void setDirectionY(double tempY) { 
+  public void setDirectionY(double tempY) {
     myDirectionY = tempY;
   }
-  public double getDirectionY() { 
+  public double getDirectionY() {
     return myDirectionY;
   }
-  public void setPointDirection(int tempDegrees) { 
+  public void setPointDirection(int tempDegrees) {
     myPointDirection = tempDegrees;
   }
-  public double getPointDirection() { 
+  public double getPointDirection() {
     return myPointDirection;
   }
   public void move() {
@@ -509,11 +509,11 @@ abstract class Floater {  // Do NOT modify the Floater class! Make changes in th
     myDirectionY += ((dAmount) * Math.sin(dRadians));
   }
   // Rotates the floater by a given number of degrees
-  public void rotate(int nDegreesOfRotation) {     
+  public void rotate(int nDegreesOfRotation) {
     myPointDirection += nDegreesOfRotation;
   }
   // Move the floater in the current direction of travel
-  public void move() {  
+  public void move() {
     // change the x and y coordinates by myDirectionX and myDirectionY
     myCenterX += myDirectionX;
     myCenterY += myDirectionY;

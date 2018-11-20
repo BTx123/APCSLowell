@@ -7,7 +7,7 @@ Steps to completing the program (These are just a suggested starting point. Feel
 
 1. Sign in to GitHub and fork [this repository](https://github.com/APCSLowell/SnowflakeCatcher)
 
-2. Add the following to the `Snowflake` class. 
+2. Add the following to the `Snowflake` class.
   - 2 member integer variables: `x` and `y`
   - 1 member boolean variable: `isMoving`
   - The constructor should initialize the members as follows:
@@ -16,7 +16,7 @@ Steps to completing the program (These are just a suggested starting point. Feel
     - `isMovin`g: `true`
   - `void erase()` which first, sets the fill to black and draws a black ellipse of size 7 at (x,y)
   - `void move()` which checks if the snowflake isMoving. If it is, increase `y` by one
-  - `void lookDown()` checks if `y` is between the top and bottom of the screen, and the position just below (x,y) is not black. If so, set `isMoving` to `false`; otherwise set `isMoving` to `true` 
+  - `void lookDown()` checks if `y` is between the top and bottom of the screen, and the position just below (x,y) is not black. If so, set `isMoving` to `false`; otherwise set `isMoving` to `true`
   - `void show()` which draws a white ellipse of size 5 at x,y
   - `void wrap()` which checks if the `y` coordinate is off the bottom of the screen. If it is, set `y` to 0 and generate a new random `x` coordinate
 3. Now create an array of Snowflakes. In `draw()` write a loop that goes through the array and for each snowflake does the following:
@@ -25,8 +25,8 @@ Steps to completing the program (These are just a suggested starting point. Feel
   - `move()`
   - `wrap()`
   - `show()`
-4. In `mouseDragged()` write some code that draws to the screen. 
-5. When you are happy with your assignment, push your repository to your GitHub account. Submit the url of your working program to the school loop drop box. 
+4. In `mouseDragged()` write some code that draws to the screen.
+5. When you are happy with your assignment, push your repository to your GitHub account. Submit the url of your working program to the school loop drop box.
 
 Extensions
 ----------
@@ -34,8 +34,8 @@ Your "snow" doesn't have to fall down. You could have bubbles that travel upward
 
 Samples of Student Work
 -----------------------
-[Jimmy](http://furiouspenguins.github.io/SnowflakeCatcher/)  
-[Chris](http://chrisma1.github.io/SnowflakeCatcher/)  
-[Zachary](https://zachooz.github.io/SnowflakeCatcher/)  
-[Teresa](http://teresamibarra.me/SnowflakeCatcher/)  
-[Lily](http://magicallilicorn.github.io/SnowflakeCatcher/)  
+[Jimmy](http://furiouspenguins.github.io/SnowflakeCatcher/)
+[Chris](http://chrisma1.github.io/SnowflakeCatcher/)
+[Zachary](https://zachooz.github.io/SnowflakeCatcher/)
+[Teresa](http://teresamibarra.me/SnowflakeCatcher/)
+[Lily](http://magicallilicorn.github.io/SnowflakeCatcher/)

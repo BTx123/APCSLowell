@@ -67,10 +67,10 @@ class Ball {
         fill(ballColor);
         ellipse(ballX, ballY, ballDiameter, ballDiameter);
     }
-    
+
     // Determines spawn direction (up or down)
     double randDir = Math.random();
-    
+
     // Update position and direction
     void update() {
         // change balls' y pos

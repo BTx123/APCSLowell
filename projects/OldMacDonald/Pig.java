@@ -1,4 +1,4 @@
-class Pig implements Animal {     
+class Pig implements Animal {
   private String myType, mySound;
   public Pig(String tempType, String tempSound) {
     myType = tempType;
@@ -15,4 +15,3 @@ class Pig implements Animal {
     return myType;
   };
 }
-

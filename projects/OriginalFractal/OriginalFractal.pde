@@ -1,7 +1,7 @@
 /* Original Fractal //<>//
  * Author: Brian Tom
  * Date: 2/8/16
- * Description: 
+ * Description:
  */
 
 int n = 20;

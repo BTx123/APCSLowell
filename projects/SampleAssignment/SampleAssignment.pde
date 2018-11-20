@@ -26,7 +26,7 @@ int d = 400;
 int dir = 3; //<>//
 
 void draw() {
-  background(100, 100, 100);  
+  background(100, 100, 100);
   smileyFace(x, height/2, d);
   x += dir;
   if (x < d/2 || x > width - d/2) {

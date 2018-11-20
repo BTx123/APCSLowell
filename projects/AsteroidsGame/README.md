@@ -1,6 +1,6 @@
 Asteroids (Part 1)
 ==================
-In this assignment we will start to replicate the old video game Asteroids. You will write a program that has a space ship that can be controlled with the keyboard. You will need to write a `SpaceShip` class. Your `SpaceShip` class will extend the `Floater` class, an `abstract` class that represents all things that float in space. 
+In this assignment we will start to replicate the old video game Asteroids. You will write a program that has a space ship that can be controlled with the keyboard. You will need to write a `SpaceShip` class. Your `SpaceShip` class will extend the `Floater` class, an `abstract` class that represents all things that float in space.
 
 An `abstract` class is an "incomplete" class. It has `abstract` methods--incomplete methods that have no body. When your class extends an `abstract` class, you typically write the methods that are needed to "complete" the class. _Note: To complete this assignment you will be writing two classes `SpaceShip` and `Star`. Do not modify the `Floater` class._
 
@@ -26,24 +26,24 @@ These steps are only a suggestion. Your Asteroids game doesn't have to work or a
 
 Samples of Student Work
 -----------------------
-[Rebecca](http://rebeccachen1.github.io/AsteroidsGame/)  
-[Vivian](http://vivianlam.github.io/AsteroidsGame/)  
-[Erika](http://bekutaa.github.io/AsteroidsGame/)   
-[Lucy](http://luchen825.github.io/AsteroidsGame/)   
-[Zachary](https://zachooz.github.io/AsteroidsGame/)   
-[Antonio](https://adcarmona.github.io/AsteroidsGame/)   
-[Eric](http://ericheung1231.github.io/AsteroidsGame/)  
-[Kirby](http://kichoy.github.io/AsteroidsGame/)   
-[Averal](http://avekan33.github.io/AsteroidsGame/)   
-[Lily](http://magicallilicorn.github.io/AsteroidsGame/)   
-[Calvin](http://icalvin12.github.io/AsteroidsGame/)   
-[Kenta](http://redtorch.github.io/AsteroidsGame/)   
-[Thomas](http://tomikam.github.io/AsteroidsGame/)  
-[Jeffrey](http://jeffreyyin1.github.io/AsteroidsGame/)  
-[Aaron](http://aaronchowapcs.github.io/Lightning/)  
-[Philip](http://philiphuang2.github.io/AsteroidsGame/)  
-[David](http://inthehat.github.io/AsteroidsGame/)  
-[Jessica](http://happyjessica97.github.io/AsteroidsGame/)   
-[Chris](http://chrisma1.github.io/AsteroidsGame/)   
+[Rebecca](http://rebeccachen1.github.io/AsteroidsGame/)
+[Vivian](http://vivianlam.github.io/AsteroidsGame/)
+[Erika](http://bekutaa.github.io/AsteroidsGame/)
+[Lucy](http://luchen825.github.io/AsteroidsGame/)
+[Zachary](https://zachooz.github.io/AsteroidsGame/)
+[Antonio](https://adcarmona.github.io/AsteroidsGame/)
+[Eric](http://ericheung1231.github.io/AsteroidsGame/)
+[Kirby](http://kichoy.github.io/AsteroidsGame/)
+[Averal](http://avekan33.github.io/AsteroidsGame/)
+[Lily](http://magicallilicorn.github.io/AsteroidsGame/)
+[Calvin](http://icalvin12.github.io/AsteroidsGame/)
+[Kenta](http://redtorch.github.io/AsteroidsGame/)
+[Thomas](http://tomikam.github.io/AsteroidsGame/)
+[Jeffrey](http://jeffreyyin1.github.io/AsteroidsGame/)
+[Aaron](http://aaronchowapcs.github.io/Lightning/)
+[Philip](http://philiphuang2.github.io/AsteroidsGame/)
+[David](http://inthehat.github.io/AsteroidsGame/)
+[Jessica](http://happyjessica97.github.io/AsteroidsGame/)
+[Chris](http://chrisma1.github.io/AsteroidsGame/)
 
 *This assignment was selected as a "Nifty CS Assignment" in 2008 by Nick Parlante @ Stanford*

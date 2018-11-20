@@ -81,4 +81,3 @@ class Snowflake {
     ellipse(x, y, mySize, mySize);
   }
 }
-

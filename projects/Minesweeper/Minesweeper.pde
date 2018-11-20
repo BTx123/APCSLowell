@@ -89,7 +89,7 @@ public class MSButton {
     width = 400/NUM_COLS;
     height = 400/NUM_ROWS;
     r = rr;
-    c = cc; 
+    c = cc;
     x = c*width;
     y = r*height;
     label = "";

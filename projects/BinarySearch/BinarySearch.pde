@@ -1,26 +1,26 @@
 
 private Item[] store = {
-  new Item(184, 14), 
-  new Item(196, 60), 
-  new Item(206, 31), 
-  new Item(2370, 65), 
-  new Item(7282, 73), 
-  new Item(8303, 90), 
-  new Item(12328, 63), 
-  new Item(12705, 14), 
-  new Item(13066, 8), 
-  new Item(14088, 92), 
-  new Item(15320, 82), 
-  new Item(15814, 60), 
-  new Item(15917, 51), 
-  new Item(17911, 96), 
-  new Item(18061, 3), 
-  new Item(18410, 56), 
-  new Item(18465, 27), 
-  new Item(18618, 64), 
-  new Item(18871, 69), 
+  new Item(184, 14),
+  new Item(196, 60),
+  new Item(206, 31),
+  new Item(2370, 65),
+  new Item(7282, 73),
+  new Item(8303, 90),
+  new Item(12328, 63),
+  new Item(12705, 14),
+  new Item(13066, 8),
+  new Item(14088, 92),
+  new Item(15320, 82),
+  new Item(15814, 60),
+  new Item(15917, 51),
+  new Item(17911, 96),
+  new Item(18061, 3),
+  new Item(18410, 56),
+  new Item(18465, 27),
+  new Item(18618, 64),
+  new Item(18871, 69),
   new Item(19967, 45)
-};    
+};
 // Linear Search
 public int linearSearch(int catNumToFind) {
   for (int i = 0; i < store.length; i++) {

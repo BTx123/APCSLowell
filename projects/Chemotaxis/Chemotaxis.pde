@@ -12,11 +12,11 @@ boolean foodPresent = false;   // food is not on canvas
 Bacteria[] colony;
 BacteriaFood food;
 
-void setup() {     
+void setup() {
   size(1280, 720);
   background(0);
   colony = new Bacteria[10];  // Make colony of 10 Bacteria
-  for (int i = 0; i < colony.length; i++) {  // instantiate each bacteria 
+  for (int i = 0; i < colony.length; i++) {  // instantiate each bacteria
     int randColor = color((int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256));
     colony[i] = new Bacteria(20, randColor);  // random color
   }
@@ -155,4 +155,3 @@ class BacteriaFood {
     rect(location.x, location.y, foodSize, foodSize);
   }
 }
-

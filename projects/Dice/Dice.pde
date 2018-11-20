@@ -3,7 +3,7 @@
  * Date: 9/8/2015
  * Description: Simulates the rolling of dice.
  */
- 
+
 // TODO: shake?
 
 Die d;  // declaration
@@ -155,4 +155,3 @@ class Die
     }
   }
 }
-

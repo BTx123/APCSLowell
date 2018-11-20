@@ -22,4 +22,3 @@ class Chick implements Animal {
     return myType;
   };
 }
-
